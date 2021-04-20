@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import './screens/AuthScreen.dart';
+import './screens/DasboardScreen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,20 +15,17 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.indigo,
-        primaryColor: Colors.indigoAccent,
+        primaryColor: Color(0xFF1d81cf),
         accentColor: Colors.amber,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('Home'),
-        ),
-        body: Center(child:
-          CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
-          ),
-        ),
-      )
+        body: AuthScreen(),
+      ),
+      routes: {
+        AuthScreen.routeName: (ctx) => AuthScreen(),
+        DashboardScreen.routeName: (ctx) => DashboardScreen()
+      },
     );
   }
 }
