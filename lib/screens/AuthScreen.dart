@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import '../widgets/AuthCard.dart';
-
 
 class AuthScreen extends StatelessWidget {
   static const routeName = '/auth';
@@ -35,7 +33,7 @@ class AuthScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(top: 100.0, bottom: 40.0),
+                    padding: const EdgeInsets.only(top: 120.0, bottom: 60.0),
                     child: Image.asset('assets/images/logo.png', width: 200,),
                   ),
                   Flexible(
