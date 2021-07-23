@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/widgets.dart';
+
 import 'package:http/http.dart' as http;
 
 class Auth with ChangeNotifier {
@@ -17,9 +18,6 @@ class Auth with ChangeNotifier {
   static const baseUrl = 'https://dev.autobound.ai/api/auth/login';
 
   Future<String> authentication(String email, String password) async {
-    print('token');
-    print(token);
-
     final  authUrl = baseUrl;
 
     try {
@@ -35,12 +33,11 @@ class Auth with ChangeNotifier {
         },
         body: body,
       );
-      final resData = json.decode(res.body);
 
+      final resData = json.decode(res.body);
       print(resData);
-      if (resData['error'] != null) {
-        return resData['error']['message'];
-      }
+
+      if (resData['error'] != null) return resData['error']['message'];
       _token = resData['token'];
 
       notifyListeners();
@@ -52,12 +49,11 @@ class Auth with ChangeNotifier {
     }
   }
 
+
+
   void logOut() {
     _token = null;
     notifyListeners();
   }
-
-
-
 
 }

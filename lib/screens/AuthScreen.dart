@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../widgets/LaunchUrl.dart';
 import '../widgets/AuthCard.dart';
 
 class AuthScreen extends StatelessWidget {
@@ -8,38 +10,29 @@ class AuthScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
 
+    final _url = 'https://mail.google.com/mail/u/0/?fs=1&tf=cm&source=mailto&to=sales@autobound.ai';
+
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(0, 69, 136, 1).withOpacity(1),
-                  Color.fromRGBO(15,132,228, 1).withOpacity(0.7),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                stops: [0, 1],
-              ),
-            ),
-          ),
           SingleChildScrollView(
             child: Container(
               height: deviceSize.height,
               width: deviceSize.width,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(top: 120.0, bottom: 60.0),
-                    child: Image.asset('assets/images/logo.png', width: 200,),
+                    padding: const EdgeInsets.only(top: 80.0),
+                    child: Image.asset('assets/images/logo.png', width: 180, height: 36.0,),
                   ),
-                  Flexible(
-                    flex: 1,
-                    // flex: deviceSize.width > 600 ? 2 : 1,
-                    child: AuthCard(),
+
+                  AuthCard(),
+
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 40.0),
+                    child: LaunchUrl(_url),
                   ),
                 ],
               ),
