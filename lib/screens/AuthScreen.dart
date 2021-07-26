@@ -19,6 +19,7 @@ class AuthScreen extends StatelessWidget {
             child: Container(
               height: deviceSize.height,
               width: deviceSize.width,
+
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -32,7 +33,7 @@ class AuthScreen extends StatelessWidget {
 
                   Padding(
                     padding: const EdgeInsets.only(bottom: 40.0),
-                    child: LaunchUrl(_url),
+                    child: LaunchUrl('Don\'t have an account?',  _url, 'Contact Sale.'),
                   ),
                 ],
               ),

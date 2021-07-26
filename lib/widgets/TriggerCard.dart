@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'package:autobound_mobile/models/triggers.dart';
+import 'package:autobound_mobile/models/trigger.dart';
 
 class TriggerCard extends StatelessWidget {
   final Trigger trigger;
@@ -10,7 +10,10 @@ class TriggerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
+
     return Card(
+      elevation: 0,
       color: Colors.white,
       margin: EdgeInsets.symmetric(vertical: 7),
       child: Container(
@@ -24,17 +27,26 @@ class TriggerCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  trigger.title,
-                  style: TextStyle(
-                    color: CupertinoColors.black,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w600,
-                    height: 1.1
+                Container(
+                  width: deviceSize.width * 0.65,
+                  child: Text(
+                    '${trigger.name}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: false,
+                    style: TextStyle(
+                      color: CupertinoColors.black,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600,
+                      height: 1.1
+                    ),
                   ),
                 ),
                 Text(
-                  trigger.contacts,
+                  '${trigger.contacts} contacts / ${trigger.companies} companies / ${trigger.groups} groups',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
                   style: TextStyle(
                     color: CupertinoColors.black,
                     fontSize: 12.0,
@@ -64,7 +76,7 @@ class TriggerCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '${trigger.rate}',
+                    '${trigger.score}',
                     style: TextStyle(
                       color: CupertinoColors.systemGrey2
                     ),

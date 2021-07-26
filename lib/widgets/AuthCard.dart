@@ -53,8 +53,6 @@ class _AuthCardState extends State<AuthCard> {
       setState(() {
         _emailErrorMessage = '';
       });
-    } else {
-      validateEmail();
     }
     _authData['email'] = value;
   }
@@ -64,8 +62,6 @@ class _AuthCardState extends State<AuthCard> {
       setState(() {
         _passwordErrorMessage = '';
       });
-    } else {
-      validatePassword();
     }
     _authData['password'] = value;
   }
@@ -128,6 +124,10 @@ class _AuthCardState extends State<AuthCard> {
   Future<void> _submit() async {
     final eValid = validateEmail();
     final pValid = validatePassword();
+
+    if(eValid && pValid) {
+      FocusScope.of(context).unfocus();
+    }
 
     if(eValid && pValid) {
       setState(() {

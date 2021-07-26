@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LaunchUrl extends StatelessWidget {
+  final String title;
   final String url;
+  final String urlPlaceholder;
 
-  LaunchUrl(this.url);
-
+  LaunchUrl(
+    this.title,
+    this.url,
+    this.urlPlaceholder
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +24,14 @@ class LaunchUrl extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Don\'t have an account?',
+            title,
             style: TextStyle(fontSize: 16.0),
           ),
           SizedBox(width: 6.0,),
           GestureDetector(
             onTap: _launchURL,
             child: Text(
-              'Contact Sale',
+              urlPlaceholder,
               style: TextStyle(
                 decoration: TextDecoration.underline,
                 fontSize: 16.0,
