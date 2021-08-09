@@ -162,7 +162,7 @@ class _AuthCardState extends State<AuthCard> {
 
           // Header Welcome
           Padding(
-            padding: const EdgeInsets.only(bottom: 14.0),
+            padding: const EdgeInsets.only(top: 90.0, bottom: 14.0),
             child: Text(
               'Welcome back!',
               style: TextStyle(
@@ -173,7 +173,7 @@ class _AuthCardState extends State<AuthCard> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 30.0),
+            padding: const EdgeInsets.only(bottom: 50.0),
             child: Text(
               'Please login with your account.',
               style: TextStyle(
@@ -186,7 +186,7 @@ class _AuthCardState extends State<AuthCard> {
 
           // Form
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 9.0),
+            padding: const EdgeInsets.symmetric(vertical: 2.0),
             child: Column(
               children: <Widget>[
                 CupertinoTextField(
@@ -241,7 +241,7 @@ class _AuthCardState extends State<AuthCard> {
           ),
 
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 9.0),
+            padding: const EdgeInsets.symmetric(vertical: 2.0),
             child: Column(
               children: <Widget>[
                 // Password input

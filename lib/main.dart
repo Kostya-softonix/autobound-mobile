@@ -10,6 +10,7 @@ import './screens/AuthScreen.dart';
 import './screens/CampaignScreen.dart';
 import './screens/TriggerScreen.dart';
 import './providers/triggers.dart';
+import './screens/DetailsScreen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,14 +22,30 @@ void main() {
       ],
       child: MyApp(),
     )
+
+    // MultiProvider(
+    //   providers: [
+    //     ChangeNotifierProvider<Auth>(create: (_) => Auth()),
+    //     ChangeNotifierProxyProvider<Auth, Triggers>(
+    //       create: (BuildContext context) => Triggers(),
+    //       update: (BuildContext context, Auth auth, Triggers triggers) => Triggers()
+    //     ),
+    //   ],
+    //   child: MyApp(),
+    // )
   );
 }
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<Auth>(
-      builder: (ctx, auth, _) => MaterialApp(
+
+    return
+    Consumer<Auth>(
+      builder: (ctx, auth, _) =>
+
+      MaterialApp(
         title: 'Autobound App',
         debugShowCheckedModeBanner: false,
 
@@ -44,7 +61,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
 
-        home: context.watch<Auth>().isAuth
+        home: auth.isAuth
           ? CampaignScreen()
           : FutureBuilder(
             future: auth.tryAutologin(),
@@ -58,6 +75,7 @@ class MyApp extends StatelessWidget {
           AuthScreen.routeName: (ctx) => AuthScreen(),
           CampaignScreen.routeName: (ctx) => CampaignScreen(),
           TriggerScreen.routeName: (ctx) => TriggerScreen(),
+          DetailsScreen.routeName: (ctx) => DetailsScreen(),
         },
       ),
     );
