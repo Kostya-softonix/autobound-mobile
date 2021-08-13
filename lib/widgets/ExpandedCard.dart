@@ -83,14 +83,15 @@ class ExpandedCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SingleContact(group.campaigns[0].contact),
+              SingleContact(group.campaigns[0].contact, group.campaigns.length, true),
+
               GestureDetector(
                 onTap: () => Navigator.of(context).pushNamed(
                   DetailsScreen.routeName,
                   arguments: group.campaigns[0].contact
                 ),
                 child: Container(
-                height: 70,
+                height: 90,
                 margin: EdgeInsets.symmetric(vertical: 5),
                 decoration: BoxDecoration(
                   border: Border(
@@ -122,7 +123,7 @@ class ExpandedCard extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(5),
       ),
-      height: group.campaigns.length == 2 ? 230 : 320,
+      height: group.campaigns.length == 2 ? 260 : 375,
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,14 +144,14 @@ class ExpandedCard extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SingleContact(group.campaigns[index].contact),
+                    SingleContact(group.campaigns[index].contact, group.campaigns.length, false),
                     GestureDetector(
                       onTap: () => Navigator.of(context).pushNamed(
                         DetailsScreen.routeName,
                         arguments: group.campaigns[index].contact
                       ),
                       child: Container(
-                      height: 70,
+                      height: 90,
                       margin: EdgeInsets.symmetric(vertical: 5),
                       decoration: BoxDecoration(
                         border: Border(

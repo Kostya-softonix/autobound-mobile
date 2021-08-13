@@ -13,7 +13,7 @@ class AuthScreen extends StatelessWidget {
     final _url = 'https://mail.google.com/mail/u/0/?fs=1&tf=cm&source=mailto&to=sales@autobound.ai';
 
     return SafeArea(
-          child: Scaffold(
+      child: Scaffold(
         body: Stack(
           children: <Widget>[
             SingleChildScrollView(

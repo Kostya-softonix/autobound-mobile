@@ -65,9 +65,4 @@ class Triggers with ChangeNotifier {
       throw(error);
     }
   }
-
-
-
-
-
 }

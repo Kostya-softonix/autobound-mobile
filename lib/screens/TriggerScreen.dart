@@ -58,7 +58,7 @@ class _TriggerScreenState extends State<TriggerScreen> {
               strokeWidth: 3,
             ),)
           : Container(
-            padding: const EdgeInsets.all(14.0),
+            padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10),
             height: deviceSize.height,
             width: double.infinity,
             child: Column(

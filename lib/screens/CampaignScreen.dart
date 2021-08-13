@@ -1,14 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../providers/auth.dart';
-
-
 import '../widgets/AppDrawer.dart';
 import '../widgets/TriggerCard.dart';
 import '../screens/TriggerScreen.dart';
-
-
 
 class CampaignScreen extends StatefulWidget {
   static const routeName = '/campaigns-screen';
@@ -20,8 +17,6 @@ class CampaignScreen extends StatefulWidget {
 
 class _CampaignScreenState extends State<CampaignScreen> {
   var _isLoading = false;
-
-
 
   Future<void> _pullTriggersRefresh (BuildContext context) async {
     await Provider.of<Auth>(context, listen: false).fetchTriggers();
