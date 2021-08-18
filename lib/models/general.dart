@@ -1,4 +1,3 @@
-
 class Contact {
   final String id;
   final String company;
@@ -55,18 +54,21 @@ class Campaign {
   final String id;
   final int score;
   final Map<String, dynamic> contact;
+  final  String contactName;
 
   Campaign({
     this.id,
     this.score,
     this.contact,
+    this.contactName
   });
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'score': score,
-      'contact': contact
+      'contact': contact,
+      'contactName': contactName
     };
   }
 }

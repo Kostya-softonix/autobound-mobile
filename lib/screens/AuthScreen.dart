@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/LaunchUrl.dart';
+import '../widgets/ContactSale.dart';
 import '../widgets/AuthCard.dart';
 
 class AuthScreen extends StatelessWidget {
@@ -9,8 +9,6 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-
-    final _url = 'https://mail.google.com/mail/u/0/?fs=1&tf=cm&source=mailto&to=sales@autobound.ai';
 
     return SafeArea(
       child: Scaffold(
@@ -26,15 +24,13 @@ class AuthScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.only(top: 61.0),
-                      child: Image.asset('assets/images/logo.png', width: 180, height: 36.0,),
+                      padding: const EdgeInsets.only(top: 16.0),
+                      child: Image.asset('assets/images/logo.png', width: 180, height: 63.0,),
                     ),
-
                     AuthCard(),
-
                     Padding(
                       padding: const EdgeInsets.only(bottom: 30.0),
-                      child: LaunchUrl('Don\'t have an account?',  _url, 'Contact Sale.'),
+                      child: ContactSale('Don\'t have an account?', 'Contact Sale.'),
                     ),
                   ],
                 ),

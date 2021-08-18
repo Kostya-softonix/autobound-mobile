@@ -28,12 +28,9 @@ dependencies:
   hexcolor: ^1.0.4
   url_launcher: ^5.7.10
   google_fonts: ^1.1.2
-  # sqflite: ^1.1.5
-  # shared_preferences: ^2.0.6
   shared_preferences: ^0.5.12+4
   expandable: ^5.0.1
   badges: ^2.0.1
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2

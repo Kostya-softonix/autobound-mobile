@@ -5,13 +5,23 @@ import 'package:hexcolor/hexcolor.dart';
 
 import '../widgets/SingleContact.dart';
 import '../models/general.dart';
+import '../models/trigger.dart';
 import '../screens/DetailsScreen.dart';
 
-class ExpandedCard extends StatelessWidget {
+class ExpandedCard extends StatefulWidget {
   final Group group;
+  final Trigger trigger;
 
-  ExpandedCard(this.group);
+  ExpandedCard(
+    this.group,
+    this.trigger
+  );
 
+  @override
+  _ExpandedCardState createState() => _ExpandedCardState();
+}
+
+class _ExpandedCardState extends State<ExpandedCard> {
   final ScrollController _scrollController = ScrollController();
 
   Widget seeMoreLessButton(String title, BuildContext context) {
@@ -80,15 +90,20 @@ class ExpandedCard extends StatelessWidget {
       width: double.infinity,
       child: Column(
         children: <Widget>[
+          // Text(group.campaigns[0].contactName),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SingleContact(group.campaigns[0].contact, group.campaigns.length, true),
+              SingleContact(widget.group.campaigns[0].contact, widget.group.campaigns.length, true),
 
               GestureDetector(
                 onTap: () => Navigator.of(context).pushNamed(
                   DetailsScreen.routeName,
-                  arguments: group.campaigns[0].contact
+                  arguments:
+                    {
+                      'contact': widget.group.campaigns[0].contact,
+                      'trigger': widget.trigger
+                    }
                 ),
                 child: Container(
                 height: 90,
@@ -107,7 +122,7 @@ class ExpandedCard extends StatelessWidget {
               ),
             ],
           ),
-          group.campaigns.length > 1
+          widget.group.campaigns.length > 1
             ? seeMoreLessButton("See more", context)
             : SizedBox(height: 0,)
         ],
@@ -123,7 +138,9 @@ class ExpandedCard extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(5),
       ),
-      height: group.campaigns.length == 2 ? 260 : 375,
+
+
+      height: widget.group.campaigns.length == 2 ? 260 : 375,
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,12 +148,12 @@ class ExpandedCard extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               controller: _scrollController,
-              itemCount: group.campaigns.length,
+              itemCount: widget.group.campaigns.length,
               itemBuilder: (ctx, index) =>
               Container(
                 decoration: BoxDecoration(
                   border: Border(
-                    bottom: index != group.campaigns.length - 1
+                    bottom: index != widget.group.campaigns.length - 1
                     ? BorderSide(width: 0.8, color: Theme.of(context).primaryColor,)
                     : BorderSide.none
                   ),
@@ -144,11 +161,15 @@ class ExpandedCard extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SingleContact(group.campaigns[index].contact, group.campaigns.length, false),
+                    SingleContact(widget.group.campaigns[index].contact, widget.group.campaigns.length, false),
                     GestureDetector(
                       onTap: () => Navigator.of(context).pushNamed(
                         DetailsScreen.routeName,
-                        arguments: group.campaigns[index].contact
+                        arguments:
+                          {
+                            'contact': widget.group.campaigns[index].contact,
+                            'trigger': widget.trigger
+                          }
                       ),
                       child: Container(
                       height: 90,
@@ -176,15 +197,16 @@ class ExpandedCard extends StatelessWidget {
       ),
     );
 
-    return Card(
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 5),
+      key: UniqueKey(),
+      child: Card(
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
         ),
         borderOnForeground: false,
-        child: Container(
-          padding: EdgeInsets.only(top: 10.0,),
-          child: ExpandablePanel(
+        child: ExpandablePanel(
             theme: const ExpandableThemeData(
               crossFadePoint: 0,
               animationDuration: const Duration(seconds: 1)
@@ -205,7 +227,7 @@ class ExpandedCard extends StatelessWidget {
             },
           ),
         ),
-      );
+    );
 
   }
 }

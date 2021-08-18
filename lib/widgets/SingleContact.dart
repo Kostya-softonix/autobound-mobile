@@ -36,7 +36,7 @@ class SingleContact extends StatelessWidget {
 
 
           Container(
-            width: deviceSize.width * 0.4,
+            width: deviceSize.width * 0.45,
             padding:
             title == 'Recipient name:' && showBadge && contactsLength > 1
             ?

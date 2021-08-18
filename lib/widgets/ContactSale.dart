@@ -1,23 +1,39 @@
+import 'dart:core';
 import 'package:flutter/material.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
-class LaunchUrl extends StatelessWidget {
+class ContactSale extends StatelessWidget {
   final String title;
-  final String url;
   final String urlPlaceholder;
 
-  LaunchUrl(
+  ContactSale(
     this.title,
-    this.url,
     this.urlPlaceholder
   );
 
   @override
   Widget build(BuildContext context) {
 
-    void _launchURL() async =>
-      await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+    void launchMailto() async {
+      final Uri params = Uri(
+        scheme: 'mailto',
+        path: 'sales@autobound.ai',
+        queryParameters: {
+          'subject': 'Subscribe',
+          'body': ''
+        }
+      );
 
+      String url = params.toString();
+      print(url);
+      await launch(url);
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        print('Could not launch $url');
+      }
+    }
 
     return Container(
       child: Row(
@@ -29,7 +45,7 @@ class LaunchUrl extends StatelessWidget {
           ),
           SizedBox(width: 6.0,),
           GestureDetector(
-            onTap: _launchURL,
+            onTap: launchMailto,
             child: Text(
               urlPlaceholder,
               style: TextStyle(

@@ -11,6 +11,12 @@ import '../models/general.dart';
 class Auth with ChangeNotifier {
   static const apiUrl = 'https://dev.autobound.ai/api/';
 
+  bool _isLoading = false;
+
+  bool get isLoading {
+    return _isLoading;
+  }
+
   // Authentication
   String _token;
 
@@ -184,6 +190,9 @@ class Auth with ChangeNotifier {
   List<Company> _campaingnCompanies = [];
   List<Group> _campaingnGroups = [];
 
+  List<Group> get campaingnGroups {
+    return _campaingnGroups;
+  }
 
   SelectedCampaign get selectedCampaign {
     return SelectedCampaign(
@@ -191,6 +200,44 @@ class Auth with ChangeNotifier {
       companies: _campaingnCompanies,
       groups: _campaingnGroups,
     );
+  }
+
+  String search = '';
+
+  void setSearchContent(String searchValue) {
+    search = searchValue;
+  }
+
+  SelectedCampaign get filteredCampaign {
+    if(search.isEmpty) {
+      return selectedCampaign;
+    } else {
+      // return selectedCampaign.toMap()['groups'].where((group) => group.campaigns.where((camp) => camp.contact['firstName'] == search) as SelectedCampaign);
+
+      final List<Group> filteredGroups = [];
+
+      campaingnGroups.forEach((group) {
+
+        var filteredGr = Group(
+          id: group.id,
+          score: group.score,
+          campaigns: group.campaigns.where((camp) => camp.contactName.toLowerCase().contains(search.toLowerCase())).toList()
+        );
+
+        print(filteredGr.campaigns);
+
+        if(filteredGr.campaigns.length > 0) {
+          filteredGroups.add(filteredGr);
+        }
+      });
+
+      final filteredSC = SelectedCampaign(
+        contacts: _campaingnContacts,
+        companies: _campaingnCompanies,
+        groups: filteredGroups,
+      );
+      return filteredSC;
+    }
   }
 
   Map<String, dynamic> findContactById(String id) {
@@ -210,83 +257,89 @@ class Auth with ChangeNotifier {
   Future<void> fetchGroupsByTrigger(String id) async {
     final url = apiUrl + 'suggestedGroups/byTrigger/$id';
 
-      try {
-        final res = await http.get(
-          url,
-          headers: <String, String> {
-            'Content-Type': 'application/json; charset=UTF-8',
-            'auth': '$token',
-          },
-        );
+    try {
 
-        final extractedData = json.decode(res.body) as Map<String, dynamic>;
-        print(extractedData['contacts'].length);
+      _isLoading = true;
 
+      final res = await http.get(
+        url,
+        headers: <String, String> {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'auth': '$token',
+        },
+      );
 
-
-        if(extractedData == null) {
-          _campaingnContacts = [];
-          return;
-        }
-
-        List<Contact> campContacts = [];
-        if(extractedData['contacts'].length > 0) {
-          extractedData['contacts'].forEach((c) {
-            campContacts.add(
-              Contact(
-                id: c['id'],
-                company: c['company'],
-                firstName: c['firstName'],
-                fullName: c['fullName'],
-                lastName: c['lastName'],
-                title: c['title'],
-                lastActivityAt: c['lastActivityAt'],
-                lastCampaignStartedAt: c['lastCampaignStartedAt'],
-              )
-            );
-          });
-        }
-        _campaingnContacts = campContacts;
-
-        List<Company> campCompanies = [];
-        if(extractedData['companies'].length > 0) {
-          extractedData['companies'].forEach((c) {
-            campCompanies.add(
-              Company(
-                id: c['id'],
-                name: c['name']
-              )
-            );
-          });
-        }
-        _campaingnCompanies = campCompanies;
-
-        List<Group> campGroups = [];
-        if(extractedData['groups'].length > 0) {
-          extractedData['groups'].forEach((g) {
-            campGroups.add(
-              Group(
-                id: g['id'],
-                score: g['score'],
-                campaigns: (g['campaigns'] as List<dynamic>).map((item) => Campaign(
-                  id: item['id'],
-                  score: item['score'],
-                  contact: findContactById(item['contact']),
-                ))
-                .toList(),
-              )
-            );
-          });
-        }
-        _campaingnGroups = campGroups;
+      final extractedData = json.decode(res.body) as Map<String, dynamic>;
+      print(extractedData['contacts'].length);
 
 
 
-        // notifyListeners();
-
-      } catch (error) {
-        throw(error);
+      if(extractedData == null) {
+        _campaingnContacts = [];
+        return;
       }
+
+      List<Contact> campContacts = [];
+      if(extractedData['contacts'].length > 0) {
+        extractedData['contacts'].forEach((c) {
+          campContacts.add(
+            Contact(
+              id: c['id'],
+              company: c['company'],
+              firstName: c['firstName'],
+              fullName: c['fullName'],
+              lastName: c['lastName'],
+              title: c['title'],
+              lastActivityAt: c['lastActivityAt'],
+              lastCampaignStartedAt: c['lastCampaignStartedAt'],
+            )
+          );
+        });
+      }
+      _campaingnContacts = campContacts;
+
+      List<Company> campCompanies = [];
+      if(extractedData['companies'].length > 0) {
+        extractedData['companies'].forEach((c) {
+          campCompanies.add(
+            Company(
+              id: c['id'],
+              name: c['name']
+            )
+          );
+        });
+      }
+      _campaingnCompanies = campCompanies;
+
+      List<Group> campGroups = [];
+      if(extractedData['groups'].length > 0) {
+        extractedData['groups'].forEach((g) {
+          campGroups.add(
+            Group(
+              id: g['id'],
+              score: g['score'],
+              campaigns: (g['campaigns'] as List<dynamic>).map((item) => Campaign(
+                id: item['id'],
+                score: item['score'],
+                contact: findContactById(item['contact']),
+                contactName: findContactById(item['contact'])['fullName']
+              ))
+              .toList(),
+            )
+          );
+        });
+      }
+      _campaingnGroups = campGroups;
+
+
+
+      notifyListeners();
+
+      _isLoading = false;
+
+    } catch (error) {
+      throw(error);
+    }
 
   }
 

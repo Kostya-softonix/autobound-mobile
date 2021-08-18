@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../providers/auth.dart';
 import '../widgets/AppDrawer.dart';
 import '../widgets/TriggerCard.dart';
 import '../screens/TriggerScreen.dart';
 
 class CampaignScreen extends StatefulWidget {
+  const CampaignScreen({ Key key, }) : super(key: key);
+
   static const routeName = '/campaigns-screen';
 
   @override
@@ -18,12 +19,15 @@ class CampaignScreen extends StatefulWidget {
 class _CampaignScreenState extends State<CampaignScreen> {
   var _isLoading = false;
 
+
   Future<void> _pullTriggersRefresh (BuildContext context) async {
     await Provider.of<Auth>(context, listen: false).fetchTriggers();
   }
 
+
   @override
   void initState() {
+    super.initState();
     setState(() {
       _isLoading = true;
     });
@@ -33,7 +37,6 @@ class _CampaignScreenState extends State<CampaignScreen> {
         _isLoading = false;
       })
     });
-    super.initState();
   }
 
   @override
@@ -45,6 +48,9 @@ class _CampaignScreenState extends State<CampaignScreen> {
     return SafeArea(
         child: Scaffold(
         appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Colors.black,
+          ),
           title: Text(
             'Suggested campaigns',
             style: const TextStyle(
@@ -89,9 +95,12 @@ class _CampaignScreenState extends State<CampaignScreen> {
                     itemCount: triggers.length,
                     itemBuilder: (ctx, i) =>
                     GestureDetector(
-                      onTap: () => Navigator.of(context).pushNamed(
+                      onTap: () => {
+                        Provider.of<Auth>(context, listen: false).fetchGroupsByTrigger(triggers[i].id),
+                        Navigator.of(context).pushNamed(
                         TriggerScreen.routeName,
                         arguments: triggers[i]),
+                      },
                       child: TriggerCard(triggers[i]),
                     ),
                   ),
