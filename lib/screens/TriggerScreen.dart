@@ -18,7 +18,14 @@ class _TriggerScreenState extends State<TriggerScreen> {
 
   void initState() {
     super.initState();
+    print('Init');
     context.read<Auth>().setSearchContent('');
+  }
+
+  @override
+  void didChangeDependencies() {
+    print('Dep');
+    super.didChangeDependencies();
   }
 
   @override
@@ -66,19 +73,37 @@ class _TriggerScreenState extends State<TriggerScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 14.0),
                       child: Text(
                         'Contacts: ${trigger.contacts} / Companies: ${trigger.companies} / Groups: ${trigger.groups}',
                         style: const TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w600
+                          fontWeight: FontWeight.w500
                         ),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: CupertinoSearchTextField(
+                        prefixInsets: const EdgeInsets.only(left: 14.0),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 0.8,
+                            color: CupertinoColors.inactiveGray,
+                          ),
+                          color: CupertinoColors.white,
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
 
+                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+
+
+                        placeholder: 'Search',
+                        placeholderStyle: TextStyle(
+                          fontSize: 18,
+                          height: 1.2,
+                          color: CupertinoColors.inactiveGray
+                        ),
                         controller: _textController,
                         onChanged: (String value) {
                           setState(() {
@@ -89,6 +114,7 @@ class _TriggerScreenState extends State<TriggerScreen> {
                               ),
                             );
                           });
+                          context.read<Auth>().setSearchContent(value);
                         },
                         onSubmitted: (String value) {
                           setState(() {
@@ -122,8 +148,10 @@ class _TriggerScreenState extends State<TriggerScreen> {
                 : Container(
                   width: deviceSize.width,
                   height: deviceSize.height * 0.7,
-                  margin: EdgeInsets.only(top: 20.0),
-                  child: Column(
+                  margin: EdgeInsets.only(top: 10.0),
+                  child:
+                  _selectedCampaign.groups.length > 0
+                  ? Column(
                     children: [
                         Expanded(
                           child: ListView.builder(
@@ -132,14 +160,23 @@ class _TriggerScreenState extends State<TriggerScreen> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                ExpandedCard(_selectedCampaign.groups[i], trigger),
+                                ExpandedCard(
+                                  _selectedCampaign.groups[i],
+                                  trigger,
+                                ),
                               ],
                             ),
                           ),
                         ),
                       ],
-                    ),
+                    )
+                    : Container(
+                      padding: EdgeInsets.only(top: 50),
+                      width: double.infinity,
+                      child: Text('No contact found.', textAlign: TextAlign.center,)
+                      ),
                   ),
+
                 ],
             ),
           ),

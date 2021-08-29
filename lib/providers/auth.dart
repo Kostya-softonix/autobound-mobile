@@ -120,14 +120,14 @@ class Auth with ChangeNotifier {
         },
       );
 
-      final extractedData = json.decode(res.body) as Map<String, dynamic>;
+      // final extractedData = json.decode(res.body) as Map<String, dynamic>;
+      userProfile = json.decode(res.body) as Map<String, dynamic>;
       print('userProfile response');
-
-      print(extractedData);
-      userProfile = extractedData;
-      final bool isSuccess = extractedData['success'];
-      print(isSuccess);
+      print(userProfile);
       notifyListeners();
+
+      final bool isSuccess = userProfile['success'];
+      print(isSuccess);
       return isSuccess;
 
     } catch(error) {
@@ -206,6 +206,7 @@ class Auth with ChangeNotifier {
 
   void setSearchContent(String searchValue) {
     search = searchValue;
+
   }
 
   SelectedCampaign get filteredCampaign {
@@ -213,7 +214,6 @@ class Auth with ChangeNotifier {
       return selectedCampaign;
     } else {
       // return selectedCampaign.toMap()['groups'].where((group) => group.campaigns.where((camp) => camp.contact['firstName'] == search) as SelectedCampaign);
-
       final List<Group> filteredGroups = [];
 
       campaingnGroups.forEach((group) {
@@ -236,6 +236,7 @@ class Auth with ChangeNotifier {
         companies: _campaingnCompanies,
         groups: filteredGroups,
       );
+
       return filteredSC;
     }
   }

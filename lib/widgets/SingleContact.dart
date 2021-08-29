@@ -40,7 +40,7 @@ class SingleContact extends StatelessWidget {
             padding:
             title == 'Recipient name:' && showBadge && contactsLength > 1
             ?
-            EdgeInsets.only(left: 12, right: 20)
+            EdgeInsets.only(left: 12, right: 25)
             :EdgeInsets.only(left: 12, right: 0) ,
             alignment: Alignment.centerRight,
 
@@ -48,10 +48,11 @@ class SingleContact extends StatelessWidget {
               elevation: 3,
               showBadge: title == 'Recipient name:' && showBadge && contactsLength > 1,
               shape: BadgeShape.square,
-              position: BadgePosition.topEnd(top: -3, end: -30),
+              position: BadgePosition.topEnd(top: -3, end: -32),
               borderRadius: BorderRadius.circular(10),
               badgeColor: Theme.of(context).primaryColor,
-              child: Text(
+              child:
+              Text(
                   data,
                   style: TextStyle(
                     color: HexColor('2A3256'),
@@ -61,15 +62,21 @@ class SingleContact extends StatelessWidget {
                   overflow: TextOverflow.fade,
                   softWrap: false,
                 ),
-              badgeContent: Text(
-                '+ ${(contactsLength -1)}'.toString(),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 10.0,
-                  fontWeight: FontWeight.w600
+              badgeContent:
+              Container(
+                width: 20,
+                child: Text(
+                  '+ ${(contactsLength -1)}'.toString(),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10.0,
+                    fontWeight: FontWeight.w600,
+
+                  ),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
                 ),
-                overflow: TextOverflow.fade,
-                softWrap: false,
               ),
             ),
           ),
@@ -80,7 +87,6 @@ class SingleContact extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
 
     return Padding(
       padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 14),

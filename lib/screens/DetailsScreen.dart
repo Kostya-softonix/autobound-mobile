@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../widgets/ActionButtons.dart';
 import '../models/trigger.dart';
+import '../widgets/SignalInfo.dart';
 
 class DetailsScreen extends StatefulWidget {
   static const routeName = '/details-screen';
@@ -12,7 +14,6 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
-
 
   @override
   Widget build(BuildContext context) {
@@ -39,13 +40,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
           ),
         ),
         body: Stack(
-
           children: [
+            // Contacts section
             Positioned(
               top: 0,
               width: deviceSize.width,
               child: Container(
-
                 color: Colors.white,
                 padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 18),
                 child: Row(
@@ -101,56 +101,51 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       size: 22.0,
                     ),
 
-
                   ],
                 ),
               ),
             ),
 
-            Positioned(
-              bottom: 20,
-              width: deviceSize.width,
-              child: Container(
-                margin: EdgeInsets.only(top: 12, bottom: 6.0),
-                color: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
 
+
+            // Signal info expanded card
+            Positioned(
+              height: deviceSize.height * 0.67,
+              top: 70.0,
+              width: deviceSize.width,
+              child:
+
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: SignalInfo(),
+                    ),
                     Container(
+                      margin: EdgeInsets.symmetric(horizontal: 18),
+                      width: double.infinity,
+                      height: 500,
                       decoration: BoxDecoration(
-                        border: Border.all(
-                          width: 1,
-                          color: Theme.of(context).primaryColor
-                        ),
                         color: CupertinoColors.white,
                         borderRadius: BorderRadius.circular(5.0),
                       ),
-                      child: CupertinoButton(
-                        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-                        minSize: kMinInteractiveDimensionCupertino,
-                        onPressed: () => {
-                          // Navigator.of(context).pushNamed(AuthScreen.routeName),
-                        },
-                        child: Text('Reject', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Theme.of(context).primaryColor),),
-                        color: Colors.white,
+                      child: Center(
+                        child: Text('Mail content'),
                       ),
                     ),
-                    CupertinoButton(
-                      borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-                      minSize: kMinInteractiveDimensionCupertino,
-                      onPressed: () => {
-
-                        // Navigator.of(context).pushNamed(AuthScreen.routeName),
-                      },
-                      child: Text('Approve', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600,), ),
-                      color: Theme.of(context).primaryColor,
-                    ),
-
                   ],
                 ),
+
               ),
+            ),
+
+            // Approve / Reject Buttons
+            Positioned(
+              bottom: 0,
+              width: deviceSize.width,
+              child: ActionButtons(),
+
             ),
           ],
         ),

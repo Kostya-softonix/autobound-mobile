@@ -1,4 +1,3 @@
-import 'package:autobound_mobile/widgets/SingleContact.dart';
 import 'package:flutter/material.dart';
 import 'package:expandable/expandable.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -9,6 +8,7 @@ import '../models/trigger.dart';
 import '../screens/DetailsScreen.dart';
 
 class ExpandedCard extends StatefulWidget {
+
   final Group group;
   final Trigger trigger;
 
@@ -122,7 +122,7 @@ class _ExpandedCardState extends State<ExpandedCard> {
               ),
             ],
           ),
-          widget.group.campaigns.length > 1
+          widget.group.campaigns.length != 1
             ? seeMoreLessButton("See more", context)
             : SizedBox(height: 0,)
         ],
@@ -140,7 +140,7 @@ class _ExpandedCardState extends State<ExpandedCard> {
       ),
 
 
-      height: widget.group.campaigns.length == 2 ? 260 : 375,
+      height: widget.group.campaigns.length == 1 ? 160 : widget.group.campaigns.length == 2 ? 260 : 375,
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,9 +198,10 @@ class _ExpandedCardState extends State<ExpandedCard> {
     );
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 5),
-      key: UniqueKey(),
+      margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 3.0),
+      // key: UniqueKey(),
       child: Card(
+
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
@@ -228,6 +229,5 @@ class _ExpandedCardState extends State<ExpandedCard> {
           ),
         ),
     );
-
   }
 }

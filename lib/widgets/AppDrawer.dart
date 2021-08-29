@@ -12,7 +12,7 @@ class AppDrawer extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 5.0 ),
       margin: const EdgeInsets.only(top: 10.0),
-      child:Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -43,17 +43,23 @@ class AppDrawer extends StatelessWidget {
         ],
       ),
     );
-
-
-
   }
-
-
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<Auth>(
-      builder: (ctx, auth, _) => Drawer(
+    final Map<String, dynamic> userProfile = context.read<Auth>().userProfile;
+
+    final String userAchronym = userProfile['firstName'][0] + userProfile['lastName'][0].toString();
+    final String user = userProfile['firstName'] + userProfile['lastName'].toString();
+    final String company = userProfile['companyName'] == null ? 'Unknown' : userProfile['companyName'].toString();
+    final String jobTitle = userProfile['jobTitle'] == null ? 'Unknown' : userProfile['jobTitle'].toString();
+    final String email = userProfile['email'].toString();
+    final String companyWebsiteUrl = userProfile['companyWebsiteUrl'] == null ? 'Unknown' : userProfile['companyWebsiteUrl'].toString();
+
+
+    return
+      Drawer(
+        elevation: 10,
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 50.0),
           child: Column(
@@ -67,7 +73,7 @@ class AppDrawer extends StatelessWidget {
                       maxRadius: 40,
                       backgroundColor: Theme.of(context).primaryColor,
                       child: Text(
-                        auth.userProfile['firstName'][0] + auth.userProfile['lastName'][0],
+                        userAchronym,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600
@@ -75,33 +81,31 @@ class AppDrawer extends StatelessWidget {
                       ),
                     ),
                   ),
-                  profileInfoItem('User:','${auth.userProfile['firstName']} ${auth.userProfile['lastName']}'),
-                  profileInfoItem('Company:', auth.userProfile['companyName'].toString()),
-                  profileInfoItem('Job title:', auth.userProfile['jobTitle'].toString()),
-                  profileInfoItem('Role:', auth.userProfile['role']['name'].toString()),
-                  profileInfoItem('Email:', auth.userProfile['email'].toString()),
-                  profileInfoItem('Website:', auth.userProfile['companyWebsiteUrl'].toString()),
+                  profileInfoItem('User:', user),
+                  profileInfoItem('Company:', company),
+                  profileInfoItem('Job title:', jobTitle),
+                  profileInfoItem('Email:', email),
+                  profileInfoItem('Website:', companyWebsiteUrl),
                 ],
               ),
-
-
-
               SizedBox(
-                width: 200,
-                height: 50,
+                width: 160,
+                height: 40,
                 child: CupertinoButton(
+
                   onPressed: () => {
-                    auth.logOut()
-                    // Navigator.of(context).pushNamed(AuthScreen.routeName),
+                    context.read<Auth>().logOut()
                   },
-                  child: Text('Logout', style: TextStyle(fontSize: 14),),
+                  padding: const EdgeInsets.symmetric(horizontal: 0),
+                  borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+                  minSize: kMinInteractiveDimensionCupertino,
                   color: Theme.of(context).primaryColor,
+                  child: Text('Logout', style: TextStyle(fontSize: 15),),
                 ),
               ),
             ],
           ),
-        )
-      ),
+        ),
     );
   }
 }
