@@ -294,7 +294,7 @@ class _SignalInfoState extends State<SignalInfo> {
     );
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 3.0),
+      margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 2.0),
       child: Card(
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -314,7 +314,7 @@ class _SignalInfoState extends State<SignalInfo> {
                   crossFadePoint: 0.2,
                   hasIcon: false,
                   tapHeaderToExpand: false,
-                  animationDuration: const Duration(milliseconds: 350),
+                  animationDuration: const Duration(milliseconds: 300),
                 ),
                 collapsed: collapsed,
                 expanded: expanded,

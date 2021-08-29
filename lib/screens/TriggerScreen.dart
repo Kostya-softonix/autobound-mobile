@@ -24,7 +24,8 @@ class _TriggerScreenState extends State<TriggerScreen> {
 
   @override
   void didChangeDependencies() {
-    print('Dep');
+    print('Depar');
+
     super.didChangeDependencies();
   }
 
