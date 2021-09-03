@@ -50,12 +50,8 @@ class _SignalInfoState extends State<SignalInfo> {
     );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-
-    // final deviceSize = MediaQuery.of(context).size;
 
     Widget fixedTitle() {
       return Container(
@@ -90,8 +86,20 @@ class _SignalInfoState extends State<SignalInfo> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Confidence:', style: TextStyle(color: HexColor('6F78A0'), fontSize: 12),),
-                  Text('48.8%', style: TextStyle(color: HexColor('E54C4C'), fontSize: 13),),
+                  Text(
+                    'Confidence:',
+                    style: TextStyle(
+                      color: HexColor('6F78A0'),
+                      fontSize: 12
+                    ),
+                  ),
+                  Text(
+                    '48.8%',
+                    style: TextStyle(
+                      color: HexColor('E54C4C'),
+                      fontSize: 13
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -100,8 +108,20 @@ class _SignalInfoState extends State<SignalInfo> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Signal type:', style: TextStyle(color: HexColor('6F78A0'), fontSize: 12),),
-                  Text('Initial Public Offering (IPO)', style: TextStyle(color: HexColor('262631'), fontSize: 13),),
+                  Text(
+                    'Signal type:',
+                    style: TextStyle(
+                      color: HexColor('6F78A0'),
+                      fontSize: 12
+                    ),
+                  ),
+                  Text(
+                    'Initial Public Offering (IPO)',
+                    style: TextStyle(
+                      color: HexColor('262631'),
+                      fontSize: 13
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -140,8 +160,20 @@ class _SignalInfoState extends State<SignalInfo> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Title:', style: TextStyle(color: HexColor('6F78A0'), fontSize: 12),),
-                Text('Initial Public Offering (IPO)', style: TextStyle(color: HexColor('262631'), fontSize: 13),),
+                Text(
+                  'Title:',
+                  style: TextStyle(
+                    color: HexColor('6F78A0'),
+                    fontSize: 12
+                  ),
+                ),
+                Text(
+                  'Initial Public Offering (IPO)',
+                  style: TextStyle(
+                    color: HexColor('262631'),
+                    fontSize: 13
+                  ),
+                ),
               ],
             ),
           ),
@@ -197,8 +229,19 @@ class _SignalInfoState extends State<SignalInfo> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Signal URL:', style: TextStyle(color: HexColor('6F78A0'), fontSize: 12),),
-                      Text('autobound.ai', style: TextStyle(color: Colors.blue, fontSize: 13, decoration: TextDecoration.underline), ),
+                      Text(
+                        'Signal URL:',
+                        style: TextStyle(
+                          color: HexColor('6F78A0'),
+                          fontSize: 12),),
+                      Text(
+                        'autobound.ai',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 13,
+                          decoration: TextDecoration.underline
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -207,8 +250,20 @@ class _SignalInfoState extends State<SignalInfo> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Signal date:', style: TextStyle(color: HexColor('6F78A0'), fontSize: 12),),
-                      Text('March 30, 2021', style: TextStyle(color: HexColor('262631'), fontSize: 13),),
+                      Text(
+                        'Signal date:',
+                        style: TextStyle(
+                          color: HexColor('6F78A0'),
+                          fontSize: 12
+                        ),
+                      ),
+                      Text(
+                        'March 30, 2021',
+                        style: TextStyle(
+                          color: HexColor('262631'),
+                          fontSize: 13
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -233,8 +288,20 @@ class _SignalInfoState extends State<SignalInfo> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Financing type:', style: TextStyle(color: HexColor('6F78A0'), fontSize: 12),),
-                      Text('IPO (Initial publicoffering) ', style: TextStyle(color: HexColor('262631'), fontSize: 13,),),
+                      Text(
+                        'Financing type:',
+                        style: TextStyle(
+                          color: HexColor('6F78A0'),
+                          fontSize: 12
+                        ),
+                      ),
+                      Text(
+                        'IPO (Initial publicoffering)',
+                        style: TextStyle(
+                          color: HexColor('262631'),
+                          fontSize: 13,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -243,8 +310,20 @@ class _SignalInfoState extends State<SignalInfo> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Funding tags:', style: TextStyle(color: HexColor('6F78A0'), fontSize: 12),),
-                      Text('IPO', style: TextStyle(color: HexColor('262631'), fontSize: 13),),
+                      Text(
+                        'Funding tags:',
+                        style: TextStyle(
+                          color: HexColor('6F78A0'),
+                          fontSize: 12
+                        ),
+                      ),
+                      Text(
+                        'IPO',
+                        style: TextStyle(
+                          color: HexColor('262631'),
+                          fontSize: 13
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -268,8 +347,19 @@ class _SignalInfoState extends State<SignalInfo> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Funding round:', style: TextStyle(color: HexColor('6F78A0'), fontSize: 12),),
-                      Text('IPO (Initial publicoffering) ', style: TextStyle(color: HexColor('262631'), fontSize: 13,),),
+                      Text(
+                        'Funding round:',
+                        style: TextStyle(
+                          color: HexColor('6F78A0'),
+                          fontSize: 12),
+                        ),
+                      Text(
+                        'IPO (Initial publicoffering)',
+                        style: TextStyle(
+                          color: HexColor('262631'),
+                          fontSize: 13,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -278,23 +368,30 @@ class _SignalInfoState extends State<SignalInfo> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Initial public offering (IPO):', style: TextStyle(color: HexColor('6F78A0'), fontSize: 12),),
-                      Text('Paycor, Inc.', style: TextStyle(color: HexColor('262631'), fontSize: 13),),
+                      Text(
+                        'Initial public offering (IPO):',
+                        style: TextStyle(
+                          color: HexColor('6F78A0'),
+                          fontSize: 12),
+                        ),
+                      Text(
+                        'Paycor, Inc.',
+                        style: TextStyle(
+                          color: HexColor('262631'),
+                          fontSize: 13),
+                        ),
                     ],
                   ),
                 ),
               ],
             ),
           ),
-
-
           seeMoreLessButton("See less", context)
         ],
       ),
     );
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 2.0),
       child: Card(
         elevation: 0,
         shape: RoundedRectangleBorder(

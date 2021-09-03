@@ -1,35 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:hexcolor/hexcolor.dart';
 
-import '../widgets/ActionButtons.dart';
 import '../models/trigger.dart';
+import '../widgets/ContactCard.dart';
+import '../providers/campaigns.dart';
+import '../widgets/ActionButtons.dart';
 import '../widgets/SignalInfo.dart';
+import '../screens/ContactDetailsScreen.dart';
 
-class DetailsScreen extends StatefulWidget {
+class DetailsScreen extends StatelessWidget {
   static const routeName = '/details-screen';
 
   @override
-  _DetailsScreenState createState() => _DetailsScreenState();
-}
-
-class _DetailsScreenState extends State<DetailsScreen> {
-
-  @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> data = ModalRoute.of(context).settings.arguments;
-    // final Map<String, dynamic> contact = data['contact'];
-    final Trigger trigger = data['trigger'];
     final deviceSize = MediaQuery.of(context).size;
+    final Map<String, dynamic> data = ModalRoute.of(context).settings.arguments;
+
+    final Contact contact = data['contact'];
+    final Trigger trigger = data['trigger'];
+
+    void pushToContactDetailsScreen() {
+      Navigator.of(context).pushNamed(
+        ContactDetailsScreen.routeName,
+        arguments: contact,
+      );
+    }
 
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Theme.of(context).primaryColorLight,
         appBar: AppBar(
           title: Text(
             trigger.name,
             style: const TextStyle(
               color: Colors.black,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
               fontSize: 18,
             ),
           ),
@@ -41,115 +47,59 @@ class _DetailsScreenState extends State<DetailsScreen> {
         ),
         body: Stack(
           children: [
-            // Contacts section
             Positioned(
+              height: deviceSize.height * 0.8,
               top: 0,
-              width: deviceSize.width,
               child: Container(
-                color: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 18),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(
-                          CupertinoIcons.slider_horizontal_3,
-                          color: Colors.black87,
-                          size: 22.0,
+                width: deviceSize.width,
+                decoration: BoxDecoration(
+                  color: HexColor('E5E5E5'),
+                ),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    children: [
+                      // Signal info expanded card
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 8.0),
+                        child: SignalInfo(),
+                      ),
+                      // COntact Card
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 8.0),
+                        child: GestureDetector(
+                          onTap: () => pushToContactDetailsScreen(),
+                          child: ContactCard(contact),
                         ),
-                        Badge(
-                          elevation: 3,
-                          showBadge: true,
-                          shape: BadgeShape.square,
-                          position: BadgePosition.topEnd(top: 0, end: -50),
-                          borderRadius: BorderRadius.circular(10),
-                          badgeColor: Theme.of(context).primaryColor,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Text(
-                              'Contacts',
-                              style: TextStyle(
-                                color: Colors.black87,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-
-                          badgeContent: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Text(
-                              '3 / 12',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600
-                              ),
-                              overflow: TextOverflow.fade,
-                              softWrap: false,
-                            ),
+                      ),
+                      // Email content
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.only(bottom: 40),
+                        height: 600,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        child: Card(
+                        child: Center(
+                            child: Text('Mail content'),
                           ),
                         ),
-                      ],
-                    ),
-
-                    Icon(
-                      Icons.keyboard_arrow_right,
-                      color: Colors.black87,
-                      size: 22.0,
-                    ),
-
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-
-
-
-            // Signal info expanded card
-            Positioned(
-              height: deviceSize.height * 0.67,
-              top: 70.0,
-              width: deviceSize.width,
-              child:
-
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: SignalInfo(),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 18),
-                      width: double.infinity,
-                      height: 500,
-                      decoration: BoxDecoration(
-                        color: CupertinoColors.white,
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      child: Center(
-                        child: Text('Mail content'),
-                      ),
-                    ),
-                  ],
-                ),
-
-              ),
-            ),
-
             // Approve / Reject Buttons
             Positioned(
               bottom: 0,
+              height: deviceSize.height * 0.1,
               width: deviceSize.width,
               child: ActionButtons(),
-
             ),
           ],
         ),
-
       ),
     );
   }

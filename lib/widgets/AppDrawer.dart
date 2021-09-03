@@ -56,7 +56,6 @@ class AppDrawer extends StatelessWidget {
     final String email = userProfile['email'].toString();
     final String companyWebsiteUrl = userProfile['companyWebsiteUrl'] == null ? 'Unknown' : userProfile['companyWebsiteUrl'].toString();
 
-
     return
       Drawer(
         elevation: 10,
@@ -92,7 +91,6 @@ class AppDrawer extends StatelessWidget {
                 width: 160,
                 height: 40,
                 child: CupertinoButton(
-
                   onPressed: () => {
                     context.read<Auth>().logOut()
                   },

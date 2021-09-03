@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
 
+import './providers/campaigns.dart';
 import './providers/auth.dart';
-import './widgets/SplashScreen.dart';
+import './providers/triggers.dart';
+import './screens/ContactDetailsScreen.dart';
 import './screens/AuthScreen.dart';
 import './screens/CampaignScreen.dart';
 import './screens/TriggerScreen.dart';
-import './providers/triggers.dart';
 import './screens/DetailsScreen.dart';
+import './widgets/SplashScreen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +21,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => Auth()),
         ChangeNotifierProvider(create: (_) => Triggers()),
+        ChangeNotifierProvider(create: (_) => Campaigns()),
       ],
       child: MyApp(),
     )
@@ -28,7 +31,7 @@ void main() {
     //     ChangeNotifierProvider<Auth>(create: (_) => Auth()),
     //     ChangeNotifierProxyProvider<Auth, Triggers>(
     //       create: (BuildContext context) => Triggers(),
-    //       update: (BuildContext context, Auth auth, Triggers triggers) => Triggers()
+    //       update: (BuildContext context, Auth auth, Triggers triggers) => Triggers(token: auth.token)
     //     ),
     //   ],
     //   child: MyApp(),
@@ -52,7 +55,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.indigo,
           primaryColor: HexColor('1A72DD'),
-          // primaryColor: Color(0xFF1d81cf),
           accentColor: Colors.amber,
           primaryColorLight: CupertinoColors.white,
           visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -76,6 +78,7 @@ class MyApp extends StatelessWidget {
           CampaignScreen.routeName: (ctx) => CampaignScreen(),
           TriggerScreen.routeName: (ctx) => TriggerScreen(),
           DetailsScreen.routeName: (ctx) => DetailsScreen(),
+          ContactDetailsScreen.routeName: (ctx) => ContactDetailsScreen(),
         },
       ),
     );

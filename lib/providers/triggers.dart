@@ -1,21 +1,13 @@
 import 'package:flutter/widgets.dart';
-
-import '../models/trigger.dart';
-
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 
+import '../models/trigger.dart';
 
 
 class Triggers with ChangeNotifier {
   static const apiUrl = 'https://dev.autobound.ai/api/';
-
-  final String token;
-
-  Triggers({
-    this.token
-  });
 
   List<Trigger> _triggers = [];
 
@@ -31,14 +23,13 @@ class Triggers with ChangeNotifier {
         url,
         headers: <String, String> {
           'Content-Type': 'application/json; charset=UTF-8',
-          'auth': token,
+          'auth': '$token',
         },
       );
 
       final List<Trigger> fetchedTriggers = [];
 
       final extractedData = json.decode(res.body) as Map<String, dynamic>;
-      // print(extractedData['triggers']);
 
       if(extractedData != null) {
         extractedData['triggers'].forEach((trg) {
@@ -56,8 +47,6 @@ class Triggers with ChangeNotifier {
         });
       }
       _triggers = fetchedTriggers;
-
-      print(_triggers);
 
       notifyListeners();
 

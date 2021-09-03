@@ -19,6 +19,7 @@ version: 1.0.0+1
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
+  # sdk: 2.12.1
 
 dependencies:
   flutter:
@@ -54,6 +55,7 @@ flutter:
   assets:
     - assets/images/logo.png
     - assets/images/autobound-icon.png
+    - assets/images/sf-logo.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

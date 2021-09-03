@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:expandable/expandable.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/SingleContact.dart';
-import '../models/general.dart';
 import '../models/trigger.dart';
 import '../screens/DetailsScreen.dart';
+import '../providers/campaigns.dart';
 
 class ExpandedCard extends StatefulWidget {
-
   final Group group;
   final Trigger trigger;
 
@@ -23,6 +23,30 @@ class ExpandedCard extends StatefulWidget {
 
 class _ExpandedCardState extends State<ExpandedCard> {
   final ScrollController _scrollController = ScrollController();
+
+  void pushToDetailScreen (
+    BuildContext context,
+    Map<String, dynamic> contact,
+    Trigger trigger
+  ) {
+     Navigator.of(context).pushNamed(
+      DetailsScreen.routeName,
+      arguments:
+        {
+          'contact': new Contact(
+            id: contact['id'],
+            company: Provider.of<Campaigns>(context, listen: false).findCompanyById(contact['company']),
+            firstName: contact['firstName'],
+            fullName: contact['fullName'],
+            lastName: contact['lastName'],
+            title: contact['title'],
+            lastActivityAt: contact['lastActivityAt'],
+            lastCampaignStartedAt: contact['lastCampaignStartedAt'],
+          ),
+          'trigger': trigger
+        }
+    );
+  }
 
   Widget seeMoreLessButton(String title, BuildContext context) {
     return Container(
@@ -76,7 +100,6 @@ class _ExpandedCardState extends State<ExpandedCard> {
 
   @override
   Widget build(BuildContext context) {
-    // final deviceSize = MediaQuery.of(context).size;
 
     final Widget collapsedContent = Container(
       decoration: BoxDecoration(
@@ -97,13 +120,10 @@ class _ExpandedCardState extends State<ExpandedCard> {
               SingleContact(widget.group.campaigns[0].contact, widget.group.campaigns.length, true),
 
               GestureDetector(
-                onTap: () => Navigator.of(context).pushNamed(
-                  DetailsScreen.routeName,
-                  arguments:
-                    {
-                      'contact': widget.group.campaigns[0].contact,
-                      'trigger': widget.trigger
-                    }
+                onTap: () => pushToDetailScreen(
+                  context,
+                  widget.group.campaigns[0].contact,
+                  widget.trigger
                 ),
                 child: Container(
                 height: 90,
@@ -138,9 +158,7 @@ class _ExpandedCardState extends State<ExpandedCard> {
         ),
         borderRadius: BorderRadius.circular(5),
       ),
-
-
-      height: widget.group.campaigns.length == 1 ? 160 : widget.group.campaigns.length == 2 ? 260 : 375,
+      height: widget.group.campaigns.length == 1 ? 120 : widget.group.campaigns.length == 2 ? 260 : 375,
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,13 +181,10 @@ class _ExpandedCardState extends State<ExpandedCard> {
                   children: [
                     SingleContact(widget.group.campaigns[index].contact, widget.group.campaigns.length, false),
                     GestureDetector(
-                      onTap: () => Navigator.of(context).pushNamed(
-                        DetailsScreen.routeName,
-                        arguments:
-                          {
-                            'contact': widget.group.campaigns[index].contact,
-                            'trigger': widget.trigger
-                          }
+                      onTap: () => pushToDetailScreen(
+                        context,
+                        widget.group.campaigns[0].contact,
+                        widget.trigger
                       ),
                       child: Container(
                       height: 90,
@@ -192,7 +207,9 @@ class _ExpandedCardState extends State<ExpandedCard> {
               ),
             ),
           ),
-          seeMoreLessButton("See less", context)
+          widget.group.campaigns.length != 1
+            ? seeMoreLessButton("See less", context)
+            : SizedBox(height: 0,)
         ],
       ),
     );
@@ -201,7 +218,6 @@ class _ExpandedCardState extends State<ExpandedCard> {
       margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 3.0),
       // key: UniqueKey(),
       child: Card(
-
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),

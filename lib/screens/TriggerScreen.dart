@@ -1,48 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:hexcolor/hexcolor.dart';
+
+import '../widgets/SearchBar.dart';
 import '../widgets/ExpandedCard.dart';
 import '../models/trigger.dart';
-import '../providers/auth.dart';
+import '../providers/campaigns.dart';
 
-class TriggerScreen extends StatefulWidget {
-  const TriggerScreen({ Key key, }) : super(key: key);
+class TriggerScreen extends StatelessWidget {
   static const routeName = '/trigger-screen';
 
   @override
-  _TriggerScreenState createState() => _TriggerScreenState();
-}
-
-class _TriggerScreenState extends State<TriggerScreen> {
-  var _textController = TextEditingController();
-
-  void initState() {
-    super.initState();
-    print('Init');
-    context.read<Auth>().setSearchContent('');
-  }
-
-  @override
-  void didChangeDependencies() {
-    print('Depar');
-
-    super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    _textController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final isLoading = context.watch<Auth>().isLoading;
     final deviceSize = MediaQuery.of(context).size;
+    final isLoading = context.watch<Campaigns>().isLoading;
 
     final Trigger trigger = ModalRoute.of(context).settings.arguments;
-
-    final _selectedCampaign = context.watch<Auth>().filteredCampaign;
 
     return SafeArea(
       child: Scaffold(
@@ -64,6 +38,9 @@ class _TriggerScreenState extends State<TriggerScreen> {
 
         body: SingleChildScrollView(
           child: Container(
+            decoration: BoxDecoration(
+              color: HexColor('E5E5E5'),
+            ),
             padding: EdgeInsets.symmetric(horizontal: 10.0),
             height: deviceSize.height,
             width: double.infinity,
@@ -83,57 +60,9 @@ class _TriggerScreenState extends State<TriggerScreen> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: CupertinoSearchTextField(
-                        prefixInsets: const EdgeInsets.only(left: 14.0),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 0.8,
-                            color: CupertinoColors.inactiveGray,
-                          ),
-                          color: CupertinoColors.white,
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-
-                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-
-
-                        placeholder: 'Search',
-                        placeholderStyle: TextStyle(
-                          fontSize: 18,
-                          height: 1.2,
-                          color: CupertinoColors.inactiveGray
-                        ),
-                        controller: _textController,
-                        onChanged: (String value) {
-                          setState(() {
-                            _textController.value.copyWith(
-                              text: value,
-                              selection: TextSelection.fromPosition(
-                                TextPosition(offset: value.length),
-                              ),
-                            );
-                          });
-                          context.read<Auth>().setSearchContent(value);
-                        },
-                        onSubmitted: (String value) {
-                          setState(() {
-                            _textController.value.copyWith(
-                              text: value,
-                              selection: TextSelection.fromPosition(
-                                TextPosition(offset: value.length),
-                              ),
-                            );
-                          });
-                          context.read<Auth>().setSearchContent(value);
-                          print('Submitted text: $value');
-                        },
-                      ),
-                    ),
+                    SearchBar(),
                   ],
                 ),
-
                 isLoading
                 ? Container(
                   width: deviceSize.width,
@@ -146,39 +75,39 @@ class _TriggerScreenState extends State<TriggerScreen> {
                       strokeWidth: 3,
                     ),
                   ),)
-                : Container(
-                  width: deviceSize.width,
-                  height: deviceSize.height * 0.7,
-                  margin: EdgeInsets.only(top: 10.0),
-                  child:
-                  _selectedCampaign.groups.length > 0
-                  ? Column(
-                    children: [
-                        Expanded(
-                          child: ListView.builder(
-                          itemCount: _selectedCampaign.groups.length,
-                          itemBuilder: (ctx, i) =>
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ExpandedCard(
-                                  _selectedCampaign.groups[i],
-                                  trigger,
-                                ),
-                              ],
+                : Consumer<Campaigns>(
+                    builder: (ctx, camp, _) => Container(
+                      width: deviceSize.width,
+                      height: deviceSize.height * 0.7,
+                      margin: EdgeInsets.only(top: 10.0),
+                      child: camp.selectedCampaign.groups.length > 0
+                      ? Column(
+                        children: [
+                          Expanded(
+                            child: ListView.builder(
+                            itemCount: camp.filteredCampaign.groups.length,
+                            itemBuilder: (ctx, i) =>
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ExpandedCard(
+                                    camp.filteredCampaign.groups[i],
+                                    trigger,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    )
-                    : Container(
-                      padding: EdgeInsets.only(top: 50),
-                      width: double.infinity,
-                      child: Text('No contact found.', textAlign: TextAlign.center,)
+                        ],
+                      )
+                      : Container(
+                        padding: EdgeInsets.only(top: 50),
+                        width: double.infinity,
+                        child: Text('No contact found.', textAlign: TextAlign.center,)
                       ),
-                  ),
-
-                ],
+                    ),
+                ),
+              ],
             ),
           ),
         ),

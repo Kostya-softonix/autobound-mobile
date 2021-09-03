@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:hexcolor/hexcolor.dart';
+
+import '../screens/TriggerScreen.dart';
+import '../providers/triggers.dart';
+import '../providers/campaigns.dart';
 import '../providers/auth.dart';
 import '../widgets/AppDrawer.dart';
 import '../widgets/TriggerCard.dart';
-import '../screens/TriggerScreen.dart';
 
 class CampaignScreen extends StatefulWidget {
   const CampaignScreen({ Key key, }) : super(key: key);
@@ -13,26 +17,19 @@ class CampaignScreen extends StatefulWidget {
 
   @override
   _CampaignScreenState createState() => _CampaignScreenState();
-
 }
 
 class _CampaignScreenState extends State<CampaignScreen> {
-  var _isLoading = false;
+  bool _isLoading = false;
 
-
-  Future<void> _pullTriggersRefresh (BuildContext context) async {
-    await Provider.of<Auth>(context, listen: false).fetchTriggers();
-  }
-
-
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
+  void fetchTriggers () {
+     setState(() {
       _isLoading = true;
     });
 
-    Provider.of<Auth>(context, listen: false).fetchTriggers().then((_) => {
+    final token = context.read<Auth>().token;
+
+    Provider.of<Triggers>(context, listen: false).fetchTriggers(token).then((_) => {
       setState(() {
         _isLoading = false;
       })
@@ -40,10 +37,22 @@ class _CampaignScreenState extends State<CampaignScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    fetchTriggers();
+  }
+
+  Future<void> _pullTriggersRefresh (BuildContext context) async {
+    fetchTriggers();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
 
-    final triggers = context.watch<Auth>().triggers;
+    final token = context.read<Auth>().token;
+
+    final triggers = context.watch<Triggers>().triggers;
 
     return SafeArea(
         child: Scaffold(
@@ -53,6 +62,7 @@ class _CampaignScreenState extends State<CampaignScreen> {
           ),
           title: Text(
             'Suggested campaigns',
+            // tok,
             style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w500,
@@ -74,11 +84,13 @@ class _CampaignScreenState extends State<CampaignScreen> {
         )
         : RefreshIndicator(
           color: Theme.of(context).primaryColor,
-          triggerMode: RefreshIndicatorTriggerMode.onEdge,
+          triggerMode: RefreshIndicatorTriggerMode.anywhere,
           onRefresh: () => _pullTriggersRefresh(context),
-          child: Container(
+          child: triggers.length > 0
+          ?
+          Container(
             decoration: BoxDecoration(
-              color: CupertinoColors.systemGrey6,
+              color: HexColor('E5E5E5'),
             ),
             width: deviceSize.width,
             height: deviceSize.height,
@@ -90,24 +102,36 @@ class _CampaignScreenState extends State<CampaignScreen> {
             ),
             child: Column(
               children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: triggers.length,
-                    itemBuilder: (ctx, i) =>
-                    GestureDetector(
-                      onTap: () => {
-                        Provider.of<Auth>(context, listen: false).fetchGroupsByTrigger(triggers[i].id),
-                        Navigator.of(context).pushNamed(
-                        TriggerScreen.routeName,
-                        arguments: triggers[i]),
-                      },
-                      child: TriggerCard(triggers[i]),
+                Consumer<Triggers>(
+                  builder: (ctx, triggers, _) => Expanded(
+                    child: ListView.builder(
+                      itemCount: triggers.triggers.length,
+                      itemBuilder: (ctx, i) =>
+                      GestureDetector(
+                        onTap: () => {
+                          Provider.of<Campaigns>(context, listen: false).fetchGroupsByTrigger(triggers.triggers[i].id, token),
+                          Navigator.of(context).pushNamed(
+                          TriggerScreen.routeName,
+                          arguments: triggers.triggers[i]),
+                        },
+                        child: TriggerCard(triggers.triggers[i]),
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
-          ),
+
+          )
+          : Container(
+            margin: EdgeInsets.only(top: 30),
+            width: deviceSize.width,
+            height: deviceSize.height,
+            child: Text(
+              'No campaigns available. Please try again later.',
+              textAlign: TextAlign.center,
+              ),
+            ),
         ),
       ),
     );

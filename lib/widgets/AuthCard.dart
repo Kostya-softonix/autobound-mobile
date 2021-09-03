@@ -213,7 +213,7 @@ class _AuthCardState extends State<AuthCard> {
                   ),
 
                   placeholder: 'Enter your email',
-                  placeholderStyle: TextStyle(
+                  placeholderStyle: const TextStyle(
                     fontSize: 16,
                     height: 1,
                     color: CupertinoColors.inactiveGray
