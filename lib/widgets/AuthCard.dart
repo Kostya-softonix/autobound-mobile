@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/ContactSale.dart';
 import '../providers/auth.dart';
 
 class AuthCard extends StatefulWidget {
@@ -156,176 +157,197 @@ class _AuthCardState extends State<AuthCard> {
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 14),
-      width: deviceSize.width * 1,
+      width: deviceSize.width,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-
-          // Header Welcome
           Padding(
-            padding: const EdgeInsets.only(top: 90.0, bottom: 14.0),
-            child: Text(
-              'Welcome back!',
-              style: TextStyle(
-                fontSize: 28.0,
-                fontWeight: FontWeight.w700,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 50.0),
-            child: Text(
-              'Please login with your account.',
-              style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black,
-                ),
+            padding: const EdgeInsets.only(top: 10.0),
+            child: Image.asset('assets/images/logo.png',
+              // fit: BoxFit.contain,
+              width: 180.0,
+              height: 40.0,
             ),
           ),
 
-          // Form
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2.0),
-            child: Column(
-              children: <Widget>[
-                CupertinoTextField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  textAlignVertical: TextAlignVertical.center,
-                  clearButtonMode: OverlayVisibilityMode.editing,
-
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+          Column(
+            children: [
+              // Header Welcome
+              Padding(
+                padding: const EdgeInsets.only(bottom: 14.0),
+                child: Text(
+                  'Welcome back!',
                   style: TextStyle(
-                    fontSize: 16.0,
-                    height: 1,
+                    fontSize: 28.0,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
                   ),
-
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 0.8,
-                      color: _emailErrorMessage.isNotEmpty
-                      ? CupertinoColors.systemRed
-                      : CupertinoColors.inactiveGray,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 50.0),
+                child: Text(
+                  'Please login with your account.',
+                  style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
                     ),
-                    color: CupertinoColors.white,
+                ),
+              ),
+
+              // Form
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2.0),
+                child: Column(
+                  children: <Widget>[
+                    CupertinoTextField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      textAlignVertical: TextAlignVertical.center,
+                      clearButtonMode: OverlayVisibilityMode.editing,
+
+                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        height: 1,
+                      ),
+
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 0.8,
+                          color: _emailErrorMessage.isNotEmpty
+                          ? CupertinoColors.systemRed
+                          : CupertinoColors.inactiveGray,
+                        ),
+                        color: CupertinoColors.white,
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+
+                      placeholder: 'Enter your email',
+                      placeholderStyle: const TextStyle(
+                        fontSize: 16,
+                        height: 1,
+                        color: CupertinoColors.inactiveGray
+                      ),
+                      onEditingComplete: () {
+                        FocusScope.of(context).unfocus();
+                      },
+                      onChanged: _onChangeEmail,
+                    ),
+
+                    // Email Error
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.only(top: 5.0,),
+                      child: Text(
+                        _emailErrorMessage.isNotEmpty ? _emailErrorMessage : '',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 13.0,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2.0),
+                child: Column(
+                  children: <Widget>[
+                    // Password input
+                    CupertinoTextField(
+                      controller: _passwordController,
+                      keyboardType: TextInputType.visiblePassword,
+                      obscureText: true,
+                      clearButtonMode: OverlayVisibilityMode.editing,
+                      textAlignVertical: TextAlignVertical.center,
+
+                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        height: 1,
+                        textBaseline: TextBaseline.alphabetic,
+                      ),
+
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 0.8,
+                          color: _passwordErrorMessage.isNotEmpty
+                          ? CupertinoColors.systemRed
+                          : CupertinoColors.inactiveGray,
+                        ),
+                        color: CupertinoColors.white,
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+
+                      placeholder: 'Enter your password',
+                      placeholderStyle: TextStyle(
+                        fontSize: 16,
+                        height: 1,
+                        color: CupertinoColors.inactiveGray
+                      ),
+
+                      onEditingComplete: () {
+                        FocusScope.of(context).unfocus();
+                      },
+                      onChanged: _onChangePassword,
+                    ),
+
+                    //Password Error
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.only(top: 4.0),
+                      child: Text(
+                        _passwordErrorMessage.isNotEmpty ? _passwordErrorMessage : '',
+                        style: TextStyle(
+                          color: CupertinoColors.systemRed,
+                          fontSize: 14.0
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // Login Button / Spinner
+              Container(
+                margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                width: isLoading
+                  ? 38.0
+                  : double.infinity,
+                height: 38.0,
+                child: isLoading
+                  ? CircularProgressIndicator(
+                    valueColor: new AlwaysStoppedAnimation<Color>(
+                      Theme.of(context).primaryColor
+                    ),
+                    strokeWidth: 2,
+                  )
+                  : CupertinoButton(
+                    onPressed: _submit,
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500
+                      ),
+                    ),
+                    color: Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(5.0),
                   ),
-
-                  placeholder: 'Enter your email',
-                  placeholderStyle: const TextStyle(
-                    fontSize: 16,
-                    height: 1,
-                    color: CupertinoColors.inactiveGray
-                  ),
-                  onEditingComplete: () {
-                    FocusScope.of(context).unfocus();
-                  },
-                  onChanged: _onChangeEmail,
-                ),
-
-                // Email Error
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.only(top: 5.0,),
-                  child: Text(
-                    _emailErrorMessage.isNotEmpty ? _emailErrorMessage : '',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 13.0,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
+
+
+          // Contact Sale component
 
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2.0),
-            child: Column(
-              children: <Widget>[
-                // Password input
-                CupertinoTextField(
-                  controller: _passwordController,
-                  keyboardType: TextInputType.visiblePassword,
-                  obscureText: true,
-                  clearButtonMode: OverlayVisibilityMode.editing,
-                  textAlignVertical: TextAlignVertical.center,
-
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    height: 1,
-                    textBaseline: TextBaseline.alphabetic,
-                  ),
-
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 0.8,
-                      color: _passwordErrorMessage.isNotEmpty
-                      ? CupertinoColors.systemRed
-                      : CupertinoColors.inactiveGray,
-                    ),
-                    color: CupertinoColors.white,
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-
-                  placeholder: 'Enter your password',
-                  placeholderStyle: TextStyle(
-                    fontSize: 16,
-                    height: 1,
-                    color: CupertinoColors.inactiveGray
-                  ),
-
-                  onEditingComplete: () {
-                    FocusScope.of(context).unfocus();
-                  },
-                  onChanged: _onChangePassword,
-                ),
-
-                //Password Error
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.only(top: 4.0),
-                  child: Text(
-                    _passwordErrorMessage.isNotEmpty ? _passwordErrorMessage : '',
-                    style: TextStyle(
-                      color: CupertinoColors.systemRed,
-                      fontSize: 14.0
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Login Button / Spinner
-          Container(
-            margin: EdgeInsets.only(top: 20.0, bottom: 200.0),
-            width: isLoading
-              ? 38.0
-              : double.infinity,
-            height: 38.0,
-            child: isLoading
-              ? CircularProgressIndicator(
-                valueColor: new AlwaysStoppedAnimation<Color>(
-                  Theme.of(context).primaryColor
-                ),
-                strokeWidth: 2,
-              )
-              : CupertinoButton(
-                onPressed: _submit,
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: const Text(
-                  'Login',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500
-                  ),
-                ),
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(5.0),
-              ),
+            padding: const EdgeInsets.only(bottom: 20.0),
+            child: ContactSale('Don\'t have an account?', 'Contact Sale.'),
           ),
         ],
       ),

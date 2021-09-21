@@ -10,22 +10,22 @@ class ActionButtons extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
       color: Colors.white,
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black12,
-          offset: const Offset(
-            0,
-            0,
-          ),
-          blurRadius: 10,
-          spreadRadius: 0.1,
-        ),
-      ],
+      // boxShadow: [
+      //   BoxShadow(
+      //     color: Colors.black12,
+      //     offset: const Offset(
+      //       0,
+      //       0,
+      //     ),
+      //     blurRadius: 10,
+      //     spreadRadius: 0.1,
+      //   ),
+      // ],
     ),
-      margin: EdgeInsets.only(top: 12, bottom: 0,),
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 18.0),
+      // margin: EdgeInsets.only(top: 12, bottom: 0,),
+      // padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 18.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         mainAxisSize: MainAxisSize.max,
         children: [
           Container(
@@ -72,9 +72,9 @@ class ActionButtons extends StatelessWidget {
               borderRadius: const BorderRadius.all(Radius.circular(5.0)),
               minSize: kMinInteractiveDimensionCupertino,
               onPressed: () => {
-
                 // Navigator.of(context).pushNamed(AuthScreen.routeName),
               },
+
               child: Text(
                 'Approve',
                 style: TextStyle(

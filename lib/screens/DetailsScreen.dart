@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
 
 import '../models/trigger.dart';
 import '../widgets/ContactCard.dart';
-import '../providers/campaigns.dart';
 import '../widgets/ActionButtons.dart';
 import '../widgets/SignalInfo.dart';
 import '../screens/ContactDetailsScreen.dart';
+import '../core/helpers.dart';
+
+import '../models/general.dart';
+import '../providers/details.dart';
+
 
 class DetailsScreen extends StatelessWidget {
   static const routeName = '/details-screen';
@@ -16,9 +21,21 @@ class DetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     final Map<String, dynamic> data = ModalRoute.of(context).settings.arguments;
+    final isLoading = context.watch<Details>().isLoading;
+
+    final String insight = context.watch<Details>().insight;
+    final bool isInsight = insight == 'insight';
+
+    // print('insight');
+    // print(insight);
 
     final Contact contact = data['contact'];
     final Trigger trigger = data['trigger'];
+    final Group group = data['group'];
+
+    final content = context.watch<Details>().content;
+
+    final appBar = generateAppBar(trigger.name);
 
     void pushToContactDetailsScreen() {
       Navigator.of(context).pushNamed(
@@ -26,80 +43,91 @@ class DetailsScreen extends StatelessWidget {
         arguments: contact,
       );
     }
+    // print(trigger.toMap());
+    // print(contact.toMap());
+    // print(group.toMap());
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Theme.of(context).primaryColorLight,
-        appBar: AppBar(
-          title: Text(
-            trigger.name,
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w600,
-              fontSize: 18,
-            ),
-          ),
-          backgroundColor: Theme.of(context).primaryColorLight,
-          elevation: 1,
-          iconTheme: IconThemeData(
-            color: Colors.black,
-          ),
+    return Scaffold(
+      backgroundColor: Theme.of(context).primaryColorLight,
+      appBar: appBar,
+
+      body: isLoading
+      ? Center(
+        child: CircularProgressIndicator(
+          backgroundColor: Colors.transparent,
+          valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+          strokeWidth: 3,
         ),
-        body: Stack(
-          children: [
-            Positioned(
-              height: deviceSize.height * 0.8,
-              top: 0,
-              child: Container(
-                width: deviceSize.width,
-                decoration: BoxDecoration(
-                  color: HexColor('E5E5E5'),
-                ),
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    children: [
-                      // Signal info expanded card
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 8.0),
-                        child: SignalInfo(),
+      )
+
+      : Stack(
+        children: [
+          Positioned(
+            height: calculateHeight(context, appBar, 0.9),
+            // height: deviceSize.height * 0.8,
+            top: 0,
+            child: Container(
+              width: deviceSize.width,
+              decoration: BoxDecoration(
+                color: HexColor('E5E5E5'),
+              ),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  children: [
+                    // Signal info expanded card
+                    if(isInsight) Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(bottom: 8.0),
+                      child: SignalInfo(),
+                    ),
+                    // COntact Card
+                    Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(bottom: 8.0),
+                      child: GestureDetector(
+                        onTap: () => pushToContactDetailsScreen(),
+                        child: ContactCard(contact),
                       ),
-                      // COntact Card
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 8.0),
-                        child: GestureDetector(
-                          onTap: () => pushToContactDetailsScreen(),
-                          child: ContactCard(contact),
-                        ),
+                    ),
+                    // Email content
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.only(bottom: 20),
+                      height: 500,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
                       ),
-                      // Email content
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.only(bottom: 40),
-                        height: 600,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        child: Card(
-                        child: Center(
-                            child: Text('Mail content'),
-                          ),
-                        ),
+                      child: Card(
+
+                        child: Column(children: [
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: content?.length,
+                              itemBuilder: (ctx, i) =>
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                                child: Text(content[i]['text'], style: TextStyle(color: Colors.black87, fontSize: 14)),
+                              ),
+                            ),
+                          )
+                        ],)
+
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            // Approve / Reject Buttons
-            Positioned(
-              bottom: 0,
-              height: deviceSize.height * 0.1,
-              width: deviceSize.width,
-              child: ActionButtons(),
-            ),
-          ],
-        ),
+          ),
+          // Approve / Reject Buttons
+          Positioned(
+            bottom: 0,
+            height: calculateHeight(context, appBar, 0.1),
+            width: deviceSize.width,
+            child: ActionButtons(),
+          ),
+        ],
       ),
     );
   }

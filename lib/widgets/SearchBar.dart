@@ -42,7 +42,13 @@ class _SearchBarState extends State<SearchBar> {
         ),
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         placeholder: 'Search',
-
+        suffixInsets: const EdgeInsets.only(right: 6.0),
+        suffixIcon: Icon(
+          CupertinoIcons.xmark_circle,
+          // CupertinoIcons.delete_left_fill,
+          size: 18,
+        ),
+        itemColor: Colors.black54,
         placeholderStyle: const TextStyle(
           fontSize: 15,
           height: 1.3,

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import './providers/campaigns.dart';
 import './providers/auth.dart';
 import './providers/triggers.dart';
+import './providers/details.dart';
 import './screens/ContactDetailsScreen.dart';
 import './screens/AuthScreen.dart';
 import './screens/CampaignScreen.dart';
@@ -22,20 +23,10 @@ void main() {
         ChangeNotifierProvider(create: (_) => Auth()),
         ChangeNotifierProvider(create: (_) => Triggers()),
         ChangeNotifierProvider(create: (_) => Campaigns()),
+        ChangeNotifierProvider(create: (_) => Details()),
       ],
       child: MyApp(),
     )
-
-    // MultiProvider(
-    //   providers: [
-    //     ChangeNotifierProvider<Auth>(create: (_) => Auth()),
-    //     ChangeNotifierProxyProvider<Auth, Triggers>(
-    //       create: (BuildContext context) => Triggers(),
-    //       update: (BuildContext context, Auth auth, Triggers triggers) => Triggers(token: auth.token)
-    //     ),
-    //   ],
-    //   child: MyApp(),
-    // )
   );
 }
 
@@ -44,8 +35,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return
-    Consumer<Auth>(
+    return Consumer<Auth>(
       builder: (ctx, auth, _) =>
 
       MaterialApp(
@@ -60,6 +50,20 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
           textTheme: GoogleFonts.rubikTextTheme(
             Theme.of(context).textTheme,
+          ),
+          appBarTheme: AppBarTheme(
+            backgroundColor: CupertinoColors.white,
+            elevation: 1,
+            shadowColor: Colors.black26,
+            titleTextStyle: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
+              fontSize: 18,
+            ),
+            foregroundColor: Colors.black,
+            iconTheme: IconThemeData(
+              color: Colors.black,
+            ),
           ),
         ),
 
@@ -82,6 +86,5 @@ class MyApp extends StatelessWidget {
         },
       ),
     );
-
   }
 }

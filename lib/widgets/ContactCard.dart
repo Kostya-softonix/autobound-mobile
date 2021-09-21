@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
 
-import '../providers/campaigns.dart';
+import '../models/general.dart';
+import '../providers/details.dart';
+
 
 class ContactCard extends StatelessWidget {
   final Contact contact;
@@ -10,8 +13,15 @@ class ContactCard extends StatelessWidget {
     this.contact
   );
 
+
   @override
   Widget build(BuildContext context) {
+    print(contact.id);
+
+    final SuggestedGroupCampaingnContact contactDetails = context.watch<Details>().suggestedGroupContact;
+    final SuggestedGroupCampaingnCompany companyDetails = context.watch<Details>().suggestedGroupCompany;
+
+
     return Card(
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -46,7 +56,7 @@ class ContactCard extends StatelessWidget {
                 width: double.infinity,
                 child:
                   Text(
-                    '${contact.title} at ${contact.company}',
+                    '${contactDetails.title} at ${companyDetails.name}',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 13.0,
@@ -78,7 +88,7 @@ class ContactCard extends StatelessWidget {
                     child: Padding(
                     padding: EdgeInsets.only(left: 8),
                       child: Text(
-                        contact.lastActivityAt == null ? 'Unknown' : contact.lastActivityAt,
+                        contactDetails.lastActivityAt,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         softWrap: true,

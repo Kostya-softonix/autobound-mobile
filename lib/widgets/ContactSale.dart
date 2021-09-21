@@ -1,6 +1,5 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
-
 import 'package:url_launcher/url_launcher.dart';
 
 class ContactSale extends StatelessWidget {
@@ -26,7 +25,6 @@ class ContactSale extends StatelessWidget {
       );
 
       String url = params.toString();
-      print(url);
       await launch(url);
       if (await canLaunch(url)) {
         await launch(url);

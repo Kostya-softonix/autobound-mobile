@@ -2,11 +2,15 @@ import '../providers/campaigns.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:badges/badges.dart';
 
-class SingleContact extends StatelessWidget {
+class SingleContactFull extends StatelessWidget {
   final Map<String, dynamic> contact;
+  final int contactsLength;
+  final bool showBadge;
 
-  SingleContact(this.contact);
+
+  SingleContactFull(this.contact, this.contactsLength, this.showBadge);
 
   @override
   Widget build(BuildContext context) {
@@ -31,21 +35,51 @@ class SingleContact extends StatelessWidget {
                 ),
               ),
             ),
+
+
             Container(
               width: deviceSize.width * 0.42,
-              padding: EdgeInsets.only(left: 12),
+              padding:
+              title == 'Recipient name:' && showBadge && contactsLength > 1
+              ? EdgeInsets.only(left: 12, right: 25)
+              : EdgeInsets.only(left: 12, right: 0),
               alignment: Alignment.centerRight,
-              child: Text(
-                data,
-                style: TextStyle(
-                  color: HexColor('2A3256'),
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.w600
-                ),
-                overflow: TextOverflow.fade,
-                softWrap: false,
-              ),
 
+              child: Badge(
+                elevation: 3,
+                showBadge: title == 'Recipient name:' && showBadge && contactsLength > 1,
+                shape: BadgeShape.square,
+                position: BadgePosition.topEnd(top: -3, end: -32),
+                borderRadius: BorderRadius.circular(10),
+                badgeColor: Theme.of(context).primaryColor,
+                child:
+                Text(
+                    data,
+                    style: TextStyle(
+                      color: HexColor('2A3256'),
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w600
+                    ),
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                  ),
+                badgeContent:
+                Container(
+                  width: 20,
+                  child: Text(
+                    '+ ${(contactsLength -1)}'.toString(),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10.0,
+                      fontWeight: FontWeight.w600,
+
+                    ),
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                  ),
+                ),
+              ),
             ),
           ],
         ),

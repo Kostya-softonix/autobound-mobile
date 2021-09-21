@@ -1,13 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import '../providers/campaigns.dart';
-
+import '../providers/details.dart';
+import '../core/helpers.dart';
+import '../models/general.dart';
 
 class ContactDetailsScreen extends StatelessWidget {
   static const routeName = '/contact-details-screen';
 
-  Widget profileInfoItem(String title, String data) {
+  void _launchURL(String url) async => {
+    await canLaunch(url) ? await launch(url) : throw 'Could not launch $url'
+  };
+
+  void redirectOrOpenMailApp(String url, bool isRedirect, bool isEmailRedirect) {
+    if(isRedirect) {
+      _launchURL(url);
+    }
+    if(isEmailRedirect) {
+      launchMailto(url, '', '');
+    }
+  }
+
+  Widget profileInfoItem(String title, String data, bool isRedirect, bool isEmailRedirect, BuildContext context) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(vertical: 5.0),
@@ -16,7 +32,7 @@ class ContactDetailsScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            flex: 2,
+            flex: 5,
             child: Text(
               title,
               style: TextStyle(
@@ -27,18 +43,23 @@ class ContactDetailsScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            flex: 2,
+            flex: 7,
             child: Container(
               width: double.infinity,
-              child: Text(
-                data == null ? 'Unknown' : data,
-                textAlign: TextAlign.end,
-                overflow: TextOverflow.fade,
-                softWrap: false,
-                style: TextStyle(
-                  color: HexColor('262631'),
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w600
+              child:
+              GestureDetector(
+                onTap: () => redirectOrOpenMailApp(data, isRedirect, isEmailRedirect),
+                child: Text(
+                  data == null ? 'Unknown' : data,
+                  textAlign: TextAlign.end,
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                  style: TextStyle(
+                    color: isRedirect || isEmailRedirect ? Theme.of(context).primaryColor : HexColor('262631'),
+                    decoration: isRedirect || isEmailRedirect ? TextDecoration.underline : TextDecoration.none,
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w600
+                  ),
                 ),
               ),
             ),
@@ -52,67 +73,69 @@ class ContactDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final Contact contact = ModalRoute.of(context).settings.arguments;
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                contact.fullName,
-                style: TextStyle(
-                  color: HexColor('2A3256'),
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w600,
-                  height: 1.1
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Image.asset(
-                  'assets/images/sf-logo.png',
-                  width: 24,
-                  height: 18,
-                ),
-              ),
-            ],
-          ),
+    final SuggestedGroupCampaingnContact contactDetails = context.watch<Details>().suggestedGroupContact;
+    final SuggestedGroupCampaingnCompany companyDetails = context.watch<Details>().suggestedGroupCompany;
 
-          backgroundColor: Theme.of(context).primaryColorLight,
-          elevation: 1,
-          iconTheme: IconThemeData(
-            color: Colors.black,
-          ),
-        ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 14.0),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColorLight,
-              border: Border.all(
-                color: HexColor('B7BED8'),
-                width: 1.2,
-                style: BorderStyle.solid,
+    return Scaffold(
+      backgroundColor: HexColor('E5E5E5'),
+      appBar: AppBar(
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              contact.fullName,
+              style: TextStyle(
+                color: HexColor('2A3256'),
+                fontSize: 18.0,
+                fontWeight: FontWeight.w600,
+                height: 1.1
               ),
-              borderRadius: BorderRadius.circular(5),
             ),
-            width: double.infinity,
-            child: Column(
-              children: [
-                profileInfoItem('Job title:', contact.title),
-                profileInfoItem('Company:', contact.company),
-                profileInfoItem('Website:', 'Unknown'),
-                profileInfoItem('Email:', 'Unknown'),
-                profileInfoItem('Industry:', 'Unknown'),
-                profileInfoItem('Created date:', 'Unknown'),
-                profileInfoItem('Last activity:', contact.lastActivityAt),
-                profileInfoItem('Last campaign date:', contact.lastCampaignStartedAt),
-              ],
-            )
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Image.asset(
+                'assets/images/sf-logo.png',
+                width: 28,
+                height: 18,
+              ),
+            ),
+          ],
+        ),
+
+        backgroundColor: Theme.of(context).primaryColorLight,
+        elevation: 1,
+        iconTheme: IconThemeData(
+          color: Colors.black,
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 14.0),
+
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColorLight,
+            border: Border.all(
+              color: HexColor('B7BED8'),
+              width: 1.2,
+              style: BorderStyle.solid,
+            ),
+            borderRadius: BorderRadius.circular(5),
           ),
+          width: double.infinity,
+          child: Column(
+            children: [
+              profileInfoItem('Job title:', contactDetails.title, false, false, context),
+              profileInfoItem('Company:', companyDetails.name, false, false,context),
+              profileInfoItem('Website:', companyDetails.websiteUrl, true, false, context),
+              profileInfoItem('Email:', contactDetails.email, false, true, context),
+              profileInfoItem('Industry:', companyDetails.industry, false, false, context),
+              profileInfoItem('Created date:', contactDetails.externalCreatedAt, false, false, context),
+              profileInfoItem('Last activity:', contactDetails.lastActivityAt, false, false, context),
+              profileInfoItem('Last campaign date:', contact.lastCampaignStartedAt, false, false, context),
+            ],
+          )
         ),
       ),
     );

@@ -16,6 +16,7 @@ class Triggers with ChangeNotifier {
   }
 
   Future<void> fetchTriggers(String token) async {
+    print('Triggered pull');
     final url = apiUrl + 'suggestedGroups/groupedByTrigger?limit=1000&offset=0';
 
     try {
@@ -30,6 +31,8 @@ class Triggers with ChangeNotifier {
       final List<Trigger> fetchedTriggers = [];
 
       final extractedData = json.decode(res.body) as Map<String, dynamic>;
+
+      print(extractedData);
 
       if(extractedData != null) {
         extractedData['triggers'].forEach((trg) {
