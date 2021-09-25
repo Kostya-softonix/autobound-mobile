@@ -13,6 +13,15 @@ import '../core/helpers.dart';
 import '../models/general.dart';
 import '../providers/details.dart';
 
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
+
+import 'package:url_launcher/url_launcher.dart';
+
+
+void _launchURL(String url) async => {
+    await canLaunch(url) ? await launch(url) : throw 'Could not launch $url'
+  };
 
 class DetailsScreen extends StatelessWidget {
   static const routeName = '/details-screen';
@@ -25,6 +34,8 @@ class DetailsScreen extends StatelessWidget {
 
     final String insight = context.watch<Details>().insight;
     final bool isInsight = insight == 'insight';
+
+    final Map<String, dynamic> customFields = context.watch<Details>().customFields;
 
     // print('insight');
     // print(insight);
@@ -45,7 +56,69 @@ class DetailsScreen extends StatelessWidget {
     }
     // print(trigger.toMap());
     // print(contact.toMap());
-    // print(group.toMap());
+    print(group.toMap());
+
+    RegExp exp = new RegExp(
+      r'{{\s*[\w.]+\s*}}',
+      caseSensitive: false,
+      multiLine: false,
+    );
+
+
+
+    convertRawHtmlToCustomField(String contentItem) {
+      print('Content item');
+      print(contentItem);
+
+      final String regexMatch = exp.stringMatch(contentItem).toString();
+      print(regexMatch);
+
+      String matches = customFields[regexMatch] != null ? customFields[regexMatch] : '';
+
+      String matchesReplace = contentItem.replaceAllMapped(exp, (match) {
+        return matches;
+      });
+
+      print(matchesReplace);
+      return matchesReplace;
+    }
+
+
+    final _htmlContent = """
+      <div>
+        <div id="subject">
+          <span> Subject: </span>
+          <span id="subject-title"> ${convertRawHtmlToCustomField(content[0].text)} </span>
+        </div>
+        <div id="content">
+          ${convertRawHtmlToCustomField(content[1].text)}
+          ${convertRawHtmlToCustomField(content[2].text)}
+          ${convertRawHtmlToCustomField(content[3].text)}
+          ${convertRawHtmlToCustomField(content[4].text)}
+          ${convertRawHtmlToCustomField(content[5].text)}
+        </div>
+      </div>
+    """;
+
+    Widget emailContentSection = Html(
+      data: _htmlContent,
+      onLinkTap: _launchURL,
+      style: {
+        "#subject-title": Style(
+          fontWeight: FontWeight.bold,
+          display: Display.INLINE
+        ),
+        "#subject": Style(
+          border: Border(bottom: BorderSide(color: Colors.grey)),
+          padding: EdgeInsets.only(bottom: 2, left: 5, right: 5, top: 2)
+        ),
+        "#content": Style(
+          padding: EdgeInsets.only(bottom: 2, left: 5, right: 5, top: 2)
+        ),
+      },
+    );
+
+
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColorLight,
@@ -81,7 +154,7 @@ class DetailsScreen extends StatelessWidget {
                       margin: const EdgeInsets.only(bottom: 8.0),
                       child: SignalInfo(),
                     ),
-                    // COntact Card
+                    // Contact Card
                     Container(
                       width: double.infinity,
                       margin: const EdgeInsets.only(bottom: 8.0),
@@ -93,26 +166,13 @@ class DetailsScreen extends StatelessWidget {
                     // Email content
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.only(bottom: 20),
-                      height: 500,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                       child: Card(
-
-                        child: Column(children: [
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: content?.length,
-                              itemBuilder: (ctx, i) =>
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                                child: Text(content[i]['text'], style: TextStyle(color: Colors.black87, fontSize: 14)),
-                              ),
-                            ),
-                          )
-                        ],)
-
+                        child: SingleChildScrollView(
+                          child: emailContentSection,
+                        )
                       ),
                     ),
                   ],

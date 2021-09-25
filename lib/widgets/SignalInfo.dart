@@ -451,12 +451,12 @@ class SignalInfo extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Text(
-                        'Paycor, Inc.',
-                        style: TextStyle(
-                          color: HexColor('262631'),
-                          fontSize: 13),
-                        ),
+                      // Text(
+                      //   'Paycor, Inc.',
+                      //   style: TextStyle(
+                      //     color: HexColor('262631'),
+                      //     fontSize: 13),
+                      //   ),
                     ],
                   ),
                 ),

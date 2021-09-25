@@ -53,7 +53,7 @@ class ActionButtons extends StatelessWidget {
               ),
               color: Colors.white,
               onPressed: () => {
-                // Navigator.of(context).pushNamed(AuthScreen.routeName),
+                Navigator.of(context).pop()
               },
             ),
           ),

@@ -79,11 +79,9 @@ class TriggerScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: ListView.builder(
-                        // TODO: check performance, play with values
-                        itemExtent: 128,
-                        itemCount: camp.filteredCampaign.groups.length,
-                        itemBuilder: (ctx, i) =>
-                          Column(
+                          itemExtent: 128,
+                          itemCount: camp.filteredCampaign.groups.length,
+                          itemBuilder: (ctx, i) => Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               // Text('${camp.filteredCampaign.groups[i].id}'),

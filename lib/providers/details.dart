@@ -8,6 +8,12 @@ import '../models/general.dart';
 
 class Details with ChangeNotifier {
 
+  Map<String, dynamic> _customFields = {};
+
+  Map<String, dynamic> get customFields {
+    return _customFields;
+  }
+
   String _token = '';
 
   Map<String, dynamic> _suggestedGroup = {};
@@ -22,9 +28,9 @@ class Details with ChangeNotifier {
     return _suggestedGroupContact;
   }
 
-  List<dynamic> _content;
+  List<EmailContent> _content;
 
-  List<dynamic> get content {
+  List<EmailContent> get content {
     return _content;
   }
 
@@ -78,7 +84,7 @@ class Details with ChangeNotifier {
         return;
       }
 
-      print(extractedData);
+      // print(extractedData);
 
       final insightInfo = extractedData['insight'];
       final insightAditionalData = insightInfo['additional_data'];
@@ -102,7 +108,7 @@ class Details with ChangeNotifier {
 
       _insightInfo = insightPayload;
 
-      print(insightPayload.toMap());
+      // print(insightPayload.toMap());
 
       notifyListeners();
 
@@ -110,6 +116,49 @@ class Details with ChangeNotifier {
       throw(error);
     }
   }
+
+  Future<void> fetchCustomFields(List<String> ids, String token) async {
+
+    final url = apiUrl + 'suggestedGroups/customFields';
+
+    try {
+      _isLoading = true;
+
+      final res = await http.post(
+        url,
+        headers: <String, String> {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'auth': '$token',
+        },
+        body: jsonEncode(<String, List<String>>{
+          'ids': ids
+        }
+      ));
+
+      final extractedData = json.decode(res.body) as Map<String, dynamic>;
+
+      final String id = ids[0];
+      print('Fields data extracted');
+      print(extractedData['customFields'][id]);
+
+
+      if(extractedData == null) {
+        print('Extracted fields null');
+        return;
+      }
+
+      _customFields = extractedData['customFields'][id];
+      print('Custom fields');
+      print(_customFields);
+
+      notifyListeners();
+
+    } catch (error) {
+      throw(error);
+    }
+  }
+
+
 
 
   Future<void> fetchSuggestedGroup(String id, String token) async {
@@ -129,7 +178,7 @@ class Details with ChangeNotifier {
       );
 
       final extractedData = json.decode(res.body) as Map<String, dynamic>;
-      // print(extractedData);
+      print(extractedData);
       print('Suggested group data extracted');
 
 
@@ -145,7 +194,35 @@ class Details with ChangeNotifier {
       final Map<String, dynamic> sg = extractedData['suggestedGroup'];
       _suggestedGroup = sg;
 
-      _content = sg['content'];
+
+      List<EmailContent> listContent = [];
+
+      if(sg['content'].length > 0) {
+        sg['content'].forEach((c) {
+          listContent.add(
+            EmailContent(
+              paragraph: c['paragraph'],
+              snippet: c['snippet'],
+              logicSet: c['logicSet'],
+              text: c['text'],
+            )
+          );
+        });
+      }
+      // print('Content List');
+      // print(listContent);
+
+      _content = listContent;
+
+      print('Content List provider');
+      print(_content);
+
+      final String customFieldsGroupId = sg['suggestedCampaigns'][0]['id'];
+
+      await fetchCustomFields([customFieldsGroupId], token);
+
+
+
 
       final dataPathContact = extractedData['suggestedGroup']['suggestedCampaigns'][0]['contact'];
 
@@ -182,7 +259,7 @@ class Details with ChangeNotifier {
 
       _insight = sg['suggestedCampaigns'][0]['type'];
 
-      print('Inside checked');
+      // print('Inside checked');
 
       if(_insight == 'insight') {
         _insightId = sg['suggestedCampaigns'][0]['insight'];
