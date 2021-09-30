@@ -284,15 +284,19 @@ class SignalInfo extends StatelessWidget {
                       ),
 
                       GestureDetector(
-                        onTap: () => _launchURL(signalInfo.url),
+                        onTap: () => signalInfo.url != 'Unknown' ? _launchURL(signalInfo.url) : () {},
                         child: Padding(
                           padding: const EdgeInsets.only(right: 6.0),
                           child: Text(
                             signalInfo.url,
                             style: TextStyle(
-                              color: Theme.of(context).primaryColor,
+                              color: signalInfo.url != 'Unknown'
+                              ? Theme.of(context).primaryColor
+                              : HexColor('262631'),
                               fontSize: 13,
-                              decoration: TextDecoration.underline,
+                              decoration: signalInfo.url != 'Unknown'
+                              ? TextDecoration.underline
+                              : TextDecoration.none,
                             ),
                             overflow: TextOverflow.ellipsis,
                             softWrap: false,
@@ -436,30 +440,30 @@ class SignalInfo extends StatelessWidget {
                     ],
                   ),
                 ),
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 3.0),
-                        child: Text(
-                          'Initial public offering:',
-                          style: TextStyle(
-                            color: HexColor('6F78A0'),
-                            fontSize: 12
-                          ),
-                        ),
-                      ),
-                      // Text(
-                      //   'Paycor, Inc.',
-                      //   style: TextStyle(
-                      //     color: HexColor('262631'),
-                      //     fontSize: 13),
-                      //   ),
-                    ],
-                  ),
-                ),
+                // Expanded(
+                //   flex: 2,
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       Padding(
+                //         padding: const EdgeInsets.only(bottom: 3.0),
+                //         child: Text(
+                //           'Initial public offering:',
+                //           style: TextStyle(
+                //             color: HexColor('6F78A0'),
+                //             fontSize: 12
+                //           ),
+                //         ),
+                //       ),
+                //       Text(
+                //         'Paycor, Inc.',
+                //         style: TextStyle(
+                //           color: HexColor('262631'),
+                //           fontSize: 13),
+                //         ),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
           ),

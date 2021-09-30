@@ -1,30 +1,73 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
-class ActionButtons extends StatelessWidget {
+import '../core/helpers.dart';
+import '../screens/CampaignScreen.dart';
+import '../providers/details.dart';
+
+
+class ActionButtons extends StatefulWidget {
+  @override
+  _ActionButtonsState createState() => _ActionButtonsState();
+}
+
+class _ActionButtonsState extends State<ActionButtons> {
+  bool isLoading = false;
+
+  Future<void> approveCampaignAndRedirectToTriggerScreen() async {
+      setState(() { isLoading = true; });
+
+      await context.read<Details>().approveCampaign();
+
+      setState(() { isLoading = false; });
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => CampaignScreen()),
+        (Route<dynamic> route) => false,
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(generateSnackBar(
+        'Success!',
+        'Email sent! The campaign will be removed from your feed.'
+        )
+      );
+    }
+
+    Future<void> rejectCampaignAndRedirectToTriggerScreen() async {
+      setState(() { isLoading = true; });
+      await context.read<Details>().rejectCampaign();
+
+      setState(() { isLoading = false; });
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => CampaignScreen()),
+        (Route<dynamic> route) => false,
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(generateSnackBar(
+        'Success!',
+        'Campaign Rejected! This campaign was removed from your feed, and the contact will not be suggested again for up to 30 days.'
+        )
+      );
+    }
 
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
 
     return Container(
-      decoration: BoxDecoration(
       color: Colors.white,
-      // boxShadow: [
-      //   BoxShadow(
-      //     color: Colors.black12,
-      //     offset: const Offset(
-      //       0,
-      //       0,
-      //     ),
-      //     blurRadius: 10,
-      //     spreadRadius: 0.1,
-      //   ),
-      // ],
-    ),
-      // margin: EdgeInsets.only(top: 12, bottom: 0,),
-      // padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 18.0),
-      child: Row(
+      child: isLoading
+      ? Center(
+        child: CupertinoActivityIndicator(
+          animating: true,
+          radius: 16,
+        ),
+      )
+      : Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         mainAxisSize: MainAxisSize.max,
         children: [
@@ -52,14 +95,12 @@ class ActionButtons extends StatelessWidget {
                 ),
               ),
               color: Colors.white,
-              onPressed: () => {
-                Navigator.of(context).pop()
-              },
+              onPressed: rejectCampaignAndRedirectToTriggerScreen,
             ),
           ),
 
           Container(
-            width: deviceSize.width * 0.40,
+            width: deviceSize.width * 0.4,
             height: 40,
             decoration: BoxDecoration(
               color: CupertinoColors.white,
@@ -71,10 +112,7 @@ class ActionButtons extends StatelessWidget {
               padding: EdgeInsets.all(0),
               borderRadius: const BorderRadius.all(Radius.circular(5.0)),
               minSize: kMinInteractiveDimensionCupertino,
-              onPressed: () => {
-                // Navigator.of(context).pushNamed(AuthScreen.routeName),
-              },
-
+              onPressed: approveCampaignAndRedirectToTriggerScreen,
               child: Text(
                 'Approve',
                 style: TextStyle(
@@ -85,7 +123,6 @@ class ActionButtons extends StatelessWidget {
               color: Theme.of(context).primaryColor,
             ),
           ),
-
         ],
       ),
     );

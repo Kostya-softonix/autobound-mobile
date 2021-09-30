@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/cupertino.dart';
 
 const apiUrl = 'https://dev.autobound.ai/api/';
 
@@ -35,11 +36,15 @@ double calculateHeight (
   final DateFormat formatter = DateFormat('EEE MMM dd yyyy');
 
   if(date != null) {
-    return formatter.format(DateTime.parse(date));
+    return formatter.format(DateTime.tryParse(date));
   } else {
     return 'Unknown';
   }
 }
+
+Future<void> launchURL(String url) async => {
+  await canLaunch(url) ? await launch(url) : throw 'Could not launch $url'
+};
 
 Future<dynamic> launchMailto(String path, String subject, String body) async {
   final Uri params = Uri(
@@ -62,4 +67,53 @@ Future<dynamic> launchMailto(String path, String subject, String body) async {
 
 String capitalizeFirstLetter (String text) {
   return '${text[0].toUpperCase()}${text.substring(1)}';
+}
+
+SnackBar generateSnackBar (String title, String message) {
+  return SnackBar(
+    behavior: SnackBarBehavior.fixed,
+    backgroundColor: Colors.white,
+    duration: Duration(seconds: 3),
+    content: SizedBox(
+      height: 80,
+      width: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Row(
+            children: [
+              Icon(
+                CupertinoIcons.check_mark_circled_solid,
+                color: Colors.green,
+                size: 18.0,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 4.0),
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16
+                  )
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 24, top: 6),
+            child: Text(
+              message,
+              style: TextStyle(
+                color: Colors.black87,
+                  fontSize: 14
+              )
+            )
+          ),
+        ],
+      ),
+    ),
+  );
 }

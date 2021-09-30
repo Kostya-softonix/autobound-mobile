@@ -23,7 +23,13 @@ class ContactDetailsScreen extends StatelessWidget {
     }
   }
 
-  Widget profileInfoItem(String title, String data, bool isRedirect, bool isEmailRedirect, BuildContext context) {
+  Widget profileInfoItem(
+    String title,
+    String data,
+    bool isRedirect,
+    bool isEmailRedirect,
+    BuildContext context
+  ) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(vertical: 5.0),
@@ -49,16 +55,26 @@ class ContactDetailsScreen extends StatelessWidget {
               child:
               GestureDetector(
                 onTap: () => redirectOrOpenMailApp(data, isRedirect, isEmailRedirect),
-                child: Text(
-                  data == null ? 'Unknown' : data,
-                  textAlign: TextAlign.end,
-                  overflow: TextOverflow.fade,
-                  softWrap: false,
-                  style: TextStyle(
-                    color: isRedirect || isEmailRedirect ? Theme.of(context).primaryColor : HexColor('262631'),
-                    decoration: isRedirect || isEmailRedirect ? TextDecoration.underline : TextDecoration.none,
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.w600
+                child: Tooltip(
+                  verticalOffset: -70,
+                  message: data ?? 'Unknown',
+                  showDuration: Duration(milliseconds: 1),
+                  child: Text(
+                    data ?? 'Unknown',
+                    // data == null ? 'Unknown' : data,
+                    textAlign: TextAlign.end,
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                    style: TextStyle(
+                      color: isRedirect || isEmailRedirect
+                        ? Theme.of(context).primaryColor
+                        : HexColor('262631'),
+                      decoration: isRedirect || isEmailRedirect
+                        ? TextDecoration.underline
+                        : TextDecoration.none,
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.w600
+                    ),
                   ),
                 ),
               ),
@@ -71,8 +87,6 @@ class ContactDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Contact contact = ModalRoute.of(context).settings.arguments;
-
     final SuggestedGroupCampaingnContact contactDetails = context.watch<Details>().suggestedGroupContact;
     final SuggestedGroupCampaingnCompany companyDetails = context.watch<Details>().suggestedGroupCompany;
 
@@ -84,7 +98,7 @@ class ContactDetailsScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              contact.fullName,
+              contactDetails.fullName,
               style: TextStyle(
                 color: HexColor('2A3256'),
                 fontSize: 18.0,
@@ -133,7 +147,7 @@ class ContactDetailsScreen extends StatelessWidget {
               profileInfoItem('Industry:', companyDetails.industry, false, false, context),
               profileInfoItem('Created date:', contactDetails.externalCreatedAt, false, false, context),
               profileInfoItem('Last activity:', contactDetails.lastActivityAt, false, false, context),
-              profileInfoItem('Last campaign date:', contact.lastCampaignStartedAt, false, false, context),
+              profileInfoItem('Last campaign date:', contactDetails.lastCampaignStartedAt, false, false, context),
             ],
           )
         ),

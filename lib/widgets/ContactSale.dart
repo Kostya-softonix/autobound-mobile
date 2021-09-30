@@ -1,6 +1,7 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:open_mail_app/open_mail_app.dart';
 
 class ContactSale extends StatelessWidget {
   final String title;
@@ -13,23 +14,48 @@ class ContactSale extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    void launchMailto() async {
-      final Uri params = Uri(
-        scheme: 'mailto',
-        path: 'sales@autobound.ai',
-        queryParameters: {
-          'subject': 'Subscribe',
-          'body': ''
-        }
+    void showNoMailAppsDialog(BuildContext context) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Open Mail App"),
+            content: Text("No mail apps installed"),
+            actions: <Widget>[
+              TextButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        },
       );
+    }
 
-      String url = params.toString();
-      await launch(url);
-      if (await canLaunch(url)) {
-        await launch(url);
+    Future<void> openMailClientAndPopulateEmailData() async {
+      var apps = await OpenMailApp.getMailApps();
+      if (apps.isEmpty) {
+        showNoMailAppsDialog(context);
       } else {
-        print('Could not launch $url');
+        showDialog(
+          context: context,
+          builder: (context) {
+            return MailAppPickerDialog(
+              mailApps: apps,
+              emailContent: EmailContent(
+                to: [
+                  'sales@autobound.ai',
+                ],
+                subject: 'Subscribe',
+                body: 'I would like to use your App!',
+                // cc: ['sales@autobound.ai'],
+                // bcc: ['sales@autobound.ai'],
+              ),
+            );
+          },
+        );
       }
     }
 
@@ -43,7 +69,7 @@ class ContactSale extends StatelessWidget {
           ),
           SizedBox(width: 6.0,),
           GestureDetector(
-            onTap: launchMailto,
+            onTap: openMailClientAndPopulateEmailData,
             child: Text(
               urlPlaceholder,
               style: TextStyle(

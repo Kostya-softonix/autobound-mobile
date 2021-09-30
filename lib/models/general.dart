@@ -1,11 +1,11 @@
 
-class EmailContent {
+class CustomEmailContent {
   final String paragraph;
   final String snippet;
   final dynamic logicSet;
   final String text;
 
-  EmailContent({
+  CustomEmailContent({
     this.paragraph,
     this.snippet,
     this.logicSet,
@@ -69,7 +69,7 @@ class SuggestedGroupCampaingn {
   final String type;
   final SuggestedGroupCampaingnContact contact;
   final SuggestedGroupCampaingnCompany company;
-  final List<EmailContent> content;
+  final List<CustomEmailContent> content;
   final String user;
   final String suggestedGroup;
   final String contentHash;
@@ -170,7 +170,7 @@ class SuggestedGroup {
   final dynamic organization;
   final double score;
   final SuggestedGroupTrigger trigger;
-  final List<EmailContent> content;
+  final List<CustomEmailContent> content;
   final Map<String, dynamic> tryToUpdateContent;
   final List<SuggestedGroupCampaingn> suggestedCampaigns;
 

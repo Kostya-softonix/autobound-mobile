@@ -3,10 +3,17 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
+import '../core/api_helpers.dart';
 import '../core/helpers.dart';
 import '../models/general.dart';
 
 class Details with ChangeNotifier {
+
+  bool _isLoading = false;
+
+  bool get isLoading {
+    return _isLoading;
+  }
 
   Map<String, dynamic> _customFields = {};
 
@@ -28,9 +35,9 @@ class Details with ChangeNotifier {
     return _suggestedGroupContact;
   }
 
-  List<EmailContent> _content;
+  List<CustomEmailContent> _content;
 
-  List<EmailContent> get content {
+  List<CustomEmailContent> get content {
     return _content;
   }
 
@@ -58,7 +65,6 @@ class Details with ChangeNotifier {
     return _insightInfo;
   }
 
-
   Future<void> fetchInsight(String id, String token) async {
 
     final url = apiUrl + 'suggestedGroups/insight/$id';
@@ -84,31 +90,55 @@ class Details with ChangeNotifier {
         return;
       }
 
-      // print(extractedData);
+      print(extractedData);
 
       final insightInfo = extractedData['insight'];
       final insightAditionalData = insightInfo['additional_data'];
 
-      final confidence = double.parse(insightAditionalData['confidence']) * 100;
+      double checkAndConvertConfidence() {
+        if(extractedData['insight'].containsKey('confidence')) {
+          return double.parse(insightAditionalData['confidence']) * 100;
+        } else {
+          return 0;
+        }
+      }
+
+      String checkAndConvertfinancingTypeTags() {
+        if(extractedData['insight'].containsKey('financing_type_tags')) {
+          return insightAditionalData['financing_type_tags'].toList().join(",");
+        } else {
+          return null;
+        }
+      }
+
+      String checkAndGetData(String param) {
+        if(extractedData['insight'].containsKey(param)) {
+          return insightAditionalData[param];
+        } else {
+          return null;
+        }
+      }
 
       final insightPayload = new IsightInfo(
-        title: insightInfo['title'] != null ? insightInfo['title'] : 'Unknown',
-        confidence: confidence != null ? confidence.toStringAsFixed(0) : 'Unknown',
-        domain: insightInfo['domain'] != null ? insightInfo['domain'] : 'Unknown',
-        url: insightInfo['url'] != null ? insightInfo['url'] : 'Unknown',
-        articleSentence: insightAditionalData['article_sentence'] != null ? insightAditionalData['article_sentence'] : 'Unknown',
-        signalDate: insightInfo['found_at'] != null ? formatedDate(insightInfo['found_at']) : 'Unknown',
-        financingType: insightAditionalData['financing_type'] != null ? insightAditionalData['financing_type'] : 'Unknown',
-        financingRound: insightAditionalData['funding_round'] != null ? insightAditionalData['funding_round'] : 'Unknown',
-        signalType: insightInfo['type'] != null ? insightInfo['type'] : 'Unknown',
-        financingTypeTags: insightAditionalData['financing_type_tags'] != null
-          ? insightAditionalData['financing_type_tags'].toList().join(",")
-          : 'Unknown'
+        title: insightInfo['title'] ?? 'Unknown',
+        confidence: checkAndConvertConfidence() != null
+          ? checkAndConvertConfidence().toStringAsFixed(0)
+          : 'Unknown',
+        domain: insightInfo['domain'] ?? 'Unknown',
+        url: insightInfo['url'] ?? 'Unknown',
+        articleSentence: checkAndGetData('article_sentence') ?? 'Unknown',
+        signalDate: insightInfo['found_at']
+          != null ? formatedDate(insightInfo['found_at'])
+          : 'Unknown',
+        financingType: checkAndGetData('financing_type') ?? 'Unknown',
+        financingRound: checkAndGetData('funding_round') ?? 'Unknown',
+        signalType: insightInfo['type'] ?? 'Unknown',
+        financingTypeTags: checkAndConvertfinancingTypeTags() ?? 'Unknown'
       );
 
       _insightInfo = insightPayload;
 
-      // print(insightPayload.toMap());
+      _isLoading = false;
 
       notifyListeners();
 
@@ -118,7 +148,6 @@ class Details with ChangeNotifier {
   }
 
   Future<void> fetchCustomFields(List<String> ids, String token) async {
-
     final url = apiUrl + 'suggestedGroups/customFields';
 
     try {
@@ -148,6 +177,7 @@ class Details with ChangeNotifier {
       }
 
       _customFields = extractedData['customFields'][id];
+
       print('Custom fields');
       print(_customFields);
 
@@ -158,11 +188,9 @@ class Details with ChangeNotifier {
     }
   }
 
-
-
-
   Future<void> fetchSuggestedGroup(String id, String token) async {
     _token = token;
+
     final url = apiUrl + 'suggestedGroups/$id';
     // print(id);
 
@@ -181,13 +209,10 @@ class Details with ChangeNotifier {
       print(extractedData);
       print('Suggested group data extracted');
 
-
-
       if(extractedData == null) {
         print('Extracted by trigger null');
         return;
       }
-
 
       // print(extractedData['suggestedGroup']);
 
@@ -195,12 +220,12 @@ class Details with ChangeNotifier {
       _suggestedGroup = sg;
 
 
-      List<EmailContent> listContent = [];
+      List<CustomEmailContent> listContent = [];
 
       if(sg['content'].length > 0) {
         sg['content'].forEach((c) {
           listContent.add(
-            EmailContent(
+            CustomEmailContent(
               paragraph: c['paragraph'],
               snippet: c['snippet'],
               logicSet: c['logicSet'],
@@ -221,24 +246,29 @@ class Details with ChangeNotifier {
 
       await fetchCustomFields([customFieldsGroupId], token);
 
-
-
-
       final dataPathContact = extractedData['suggestedGroup']['suggestedCampaigns'][0]['contact'];
 
       final contact = new SuggestedGroupCampaingnContact(
-        email: dataPathContact['email'] != null ? dataPathContact['email'] : 'Unknown',
-        department: dataPathContact['department'] != null ? dataPathContact['department'] : 'Unknown',
-        externalCreatedAt: dataPathContact['externalCreatedAt'] != null ? formatedDate(dataPathContact['externalCreatedAt']) : 'Unknown',
-        externalDeletedAt: dataPathContact['externalDeletedAt'] != null ? formatedDate(dataPathContact['externalDeletedAt']) : 'Unknown',
-        firstName: dataPathContact['firstName'] != null ? dataPathContact['firstName'] : 'Unknown',
-        fullName: dataPathContact['fullName'] != null ? dataPathContact['fullName'] : 'Unknown',
-        lastActivityAt: dataPathContact['lastActivityAt'] != null ? formatedDate(dataPathContact['lastActivityAt']) : 'Unknown',
-        lastCampaignStartedAt: dataPathContact['lastCampaignStartedAt'] != null ? formatedDate(dataPathContact['lastCampaignStartedAt']) : 'Unknown',
-        lastName: dataPathContact['lastName'] != null ? dataPathContact['lastName'] : 'Unknown',
-        mobilePhoneNumber: dataPathContact['mobilePhoneNumber'] != null ? dataPathContact['mobilePhoneNumber'] : 'Unknown',
-        phoneNumber: dataPathContact['phoneNumber'] != null ? dataPathContact['phoneNumber'] : 'Unknown',
-        title: dataPathContact['title'] != null ? dataPathContact['title'] : 'Unknown',
+        email: dataPathContact['email'] ?? 'Unknown',
+        department: dataPathContact['department'] ?? 'Unknown',
+        externalCreatedAt: dataPathContact['externalCreatedAt']
+          != null ? formatedDate(dataPathContact['externalCreatedAt'])
+          : 'Unknown',
+        externalDeletedAt: dataPathContact['externalDeletedAt']
+          != null ? formatedDate(dataPathContact['externalDeletedAt'])
+          : 'Unknown',
+        firstName: dataPathContact['firstName'] ?? 'Unknown',
+        fullName: dataPathContact['fullName'] ?? 'Unknown',
+        lastActivityAt: dataPathContact['lastActivityAt']
+          != null ? formatedDate(dataPathContact['lastActivityAt'])
+          : 'Unknown',
+        lastCampaignStartedAt: dataPathContact['lastCampaignStartedAt']
+          != null ? formatedDate(dataPathContact['lastCampaignStartedAt'])
+          : 'Unknown',
+        lastName: dataPathContact['lastName'] ?? 'Unknown',
+        mobilePhoneNumber: dataPathContact['mobilePhoneNumber'] ?? 'Unknown',
+        phoneNumber: dataPathContact['phoneNumber'] ?? 'Unknown',
+        title: dataPathContact['title'] ?? 'Unknown',
         id: dataPathContact['id'],
       );
 
@@ -248,41 +278,101 @@ class Details with ChangeNotifier {
 
       final company = new SuggestedGroupCampaingnCompany(
         id: dataPathCompany['id'],
-        name: dataPathCompany['name'] != null ? dataPathCompany['name'] : 'Unknown',
-        externalId: dataPathCompany['externalId'] != null ? dataPathCompany['externalId'] : 'Unknown',
-        industry: dataPathCompany['industry'] != null ? dataPathCompany['industry'] : 'Unknown',
-        metaCompany: dataPathCompany['metaCompany'] != null ? dataPathCompany['metaCompany'] : 'Unknown',
-        websiteUrl: dataPathCompany['websiteUrl'] != null ? dataPathCompany['websiteUrl'] : 'Unknown',
+        name: dataPathCompany['name'] ?? 'Unknown',
+        externalId: dataPathCompany['externalId'] ?? 'Unknown',
+        industry: dataPathCompany['industry'] ?? 'Unknown',
+        metaCompany: dataPathCompany['metaCompany'] ?? 'Unknown',
+        websiteUrl: dataPathCompany['websiteUrl'] ?? 'Unknown',
       );
 
       _suggestedGroupCompany = company;
 
       _insight = sg['suggestedCampaigns'][0]['type'];
 
-      // print('Inside checked');
-
       if(_insight == 'insight') {
         _insightId = sg['suggestedCampaigns'][0]['insight'];
 
         final String insId = sg['suggestedCampaigns'][0]['insight'];
         await fetchInsight(insId, _token);
-
       }
 
+      _isLoading = false;
 
       notifyListeners();
-      _isLoading = false;
 
     } catch (error) {
       throw(error);
     }
   }
 
-  bool _isLoading = false;
+  Future<void> approveCampaign() async {
+    print('Approve');
+    final url = apiUrl + 'suggestedGroups/startCampaign';
 
-  bool get isLoading {
-    return _isLoading;
+    final String id = suggestedGroup['suggestedCampaigns'][0]['id'];
+    final String subject = content[0].text;
+    final String body = content[1].text + content[2].text + content[3].text + content[4].text + content[5].text;
+
+    final List<JsonApprovePayload> payload = [
+      JsonApprovePayload(id, body, subject),
+    ];
+
+    print(payload);
+
+    String finalPayload = jsonEncode(payload);
+    print(finalPayload);
+
+    try {
+      final res = await http.post(
+        url,
+        headers: <String, String> {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'auth': _token,
+        },
+        body: finalPayload
+      );
+
+      final extractedData = json.decode(res.body) as Map<String, dynamic>;
+
+      print('Approve data extracted');
+      print(extractedData);
+
+    } catch (error) {
+      throw(error);
+    }
   }
 
+  Future<void> rejectCampaign() async {
+    final url = apiUrl + 'suggestedGroups/rejectCampaign';
 
+    final String idString = suggestedGroup['suggestedCampaigns'][0]['id'];
+
+    final List<JsonIdPayload> payload = [
+      JsonIdPayload(idString),
+    ];
+
+    print(payload);
+
+    String finalPayload = jsonEncode(payload);
+    print(finalPayload);
+
+    try {
+      final res = await http.post(
+        url,
+        headers: <String, String> {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'auth': _token,
+        },
+        body: finalPayload
+      );
+
+      final extractedData = json.decode(res.body) as Map<String, dynamic>;
+
+      print('Reject data extracted');
+      print(extractedData);
+
+    } catch (error) {
+      throw(error);
+    }
+  }
 }

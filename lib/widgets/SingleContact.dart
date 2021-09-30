@@ -35,15 +35,20 @@ class SingleContact extends StatelessWidget {
               width: deviceSize.width * 0.42,
               padding: EdgeInsets.only(left: 12),
               alignment: Alignment.centerRight,
-              child: Text(
-                data,
-                style: TextStyle(
-                  color: HexColor('2A3256'),
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.w600
+              child: Tooltip(
+                verticalOffset: -70,
+                showDuration: Duration(milliseconds: 1),
+                message: data,
+                child: Text(
+                  data,
+                  style: TextStyle(
+                    color: HexColor('2A3256'),
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w600
+                  ),
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
                 ),
-                overflow: TextOverflow.fade,
-                softWrap: false,
               ),
 
             ),

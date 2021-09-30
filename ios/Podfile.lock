@@ -2,6 +2,8 @@ PODS:
   - Flutter (1.0.0)
   - hexcolor (0.0.1):
     - Flutter
+  - open_mail_app (0.0.1):
+    - Flutter
   - path_provider (0.0.1):
     - Flutter
   - shared_preferences (0.0.1):
@@ -18,6 +20,7 @@ PODS:
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - hexcolor (from `.symlinks/plugins/hexcolor/ios`)
+  - open_mail_app (from `.symlinks/plugins/open_mail_app/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
@@ -30,6 +33,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   hexcolor:
     :path: ".symlinks/plugins/hexcolor/ios"
+  open_mail_app:
+    :path: ".symlinks/plugins/open_mail_app/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
   shared_preferences:
@@ -46,6 +51,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   hexcolor: fdfb9c4258ad96e949c2dbcdf790a62194b8aa89
+  open_mail_app: 794172f6a22cd16319d3ddaf45e945b2f74952b0
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef

@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-import '../screens/TriggerScreen.dart';
+import '../core/helpers.dart';
 import '../providers/triggers.dart';
-import '../providers/campaigns.dart';
 import '../providers/auth.dart';
 import '../widgets/AppDrawer.dart';
 import '../widgets/TriggerCard.dart';
-import '../core/helpers.dart';
+import '../screens/TriggerScreen.dart';
 
 class CampaignScreen extends StatefulWidget {
   const CampaignScreen({ Key key, }) : super(key: key);
@@ -49,16 +48,10 @@ class _CampaignScreenState extends State<CampaignScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final token = context.read<Auth>().token;
     final triggers = context.watch<Triggers>().triggers;
     final appBar = generateAppBar('Suggested campaigns');
 
-
     void fetchTriggerAndRedirectToTriggerScreen(int index) {
-      Provider.of<Campaigns>(context, listen: false).fetchGroupsByTrigger(
-        triggers[index].id,
-        token
-      );
       Navigator.of(context).pushNamed(
         TriggerScreen.routeName,
         arguments: triggers[index]
@@ -66,31 +59,29 @@ class _CampaignScreenState extends State<CampaignScreen> {
     }
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: appBar,
       drawer: AppDrawer(),
       body: Container(
+        width: double.infinity,
+        color: HexColor('E5E5E5'),
         padding: const EdgeInsets.only(
           left: 14.0,
           right: 14.0,
           top: 14.0,
           bottom: 30.0
         ),
-        decoration: BoxDecoration(
-          color: HexColor('E5E5E5'),
-        ),
-        width: double.infinity,
-        height: calculateHeight(context, appBar, 1),
         child: _isLoading && triggers.length == 0
-        ? Center(child:
-            CircularProgressIndicator(
-              backgroundColor: Colors.transparent,
-              valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
-              strokeWidth: 3,
+          ?
+          Center(
+            child: CupertinoActivityIndicator(
+              animating: true,
+              radius: 16,
             ),
           )
-        :
-        RefreshIndicator(
-          displacement: 40,
+          :
+          RefreshIndicator(
+          displacement: 140,
           color: Theme.of(context).primaryColor,
           triggerMode: RefreshIndicatorTriggerMode.onEdge,
           onRefresh: () => _pullTriggersRefresh(context),
@@ -106,7 +97,9 @@ class _CampaignScreenState extends State<CampaignScreen> {
                       itemCount: triggers.triggers.length,
                       itemBuilder: (ctx, i) =>
                       GestureDetector(
-                        onTap: () => fetchTriggerAndRedirectToTriggerScreen(i),
+                        onTap: () => _isLoading
+                          ? null
+                          : fetchTriggerAndRedirectToTriggerScreen(i),
                         child: TriggerCard(triggers.triggers[i]),
                       ),
                     ),

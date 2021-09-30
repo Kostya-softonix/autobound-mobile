@@ -5,22 +5,12 @@ import 'package:provider/provider.dart';
 import '../models/general.dart';
 import '../providers/details.dart';
 
-
 class ContactCard extends StatelessWidget {
-  final Contact contact;
-
-  ContactCard(
-    this.contact
-  );
-
 
   @override
   Widget build(BuildContext context) {
-    print(contact.id);
-
     final SuggestedGroupCampaingnContact contactDetails = context.watch<Details>().suggestedGroupContact;
     final SuggestedGroupCampaingnCompany companyDetails = context.watch<Details>().suggestedGroupCompany;
-
 
     return Card(
       child: Container(
@@ -32,7 +22,7 @@ class ContactCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  contact.fullName,
+                  contactDetails.fullName,
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 16.0,

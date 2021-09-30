@@ -36,7 +36,6 @@ class Campaigns with ChangeNotifier {
     search = searchValue;
     print('Trig Search Provider');
     print(searchValue);
-
     filterCampaign();
   }
 
@@ -65,8 +64,6 @@ class Campaigns with ChangeNotifier {
             || camp.companyName.toLowerCase().contains(search.toLowerCase())
           ).toList()
         );
-
-
 
         print(filteredGr.campaigns);
 
@@ -101,8 +98,8 @@ class Campaigns with ChangeNotifier {
     print(id);
 
     try {
-
       _isLoading = true;
+      notifyListeners();
 
       final res = await http.get(
         url,
@@ -125,6 +122,7 @@ class Campaigns with ChangeNotifier {
       }
 
       List<Contact> campContacts = [];
+
       if(extractedData['contacts'].length > 0) {
         extractedData['contacts'].forEach((c) {
           campContacts.add(
@@ -144,6 +142,7 @@ class Campaigns with ChangeNotifier {
       _campaingnContacts = campContacts;
 
       List<Company> campCompanies = [];
+
       if(extractedData['companies'].length > 0) {
         extractedData['companies'].forEach((c) {
           campCompanies.add(
@@ -157,6 +156,7 @@ class Campaigns with ChangeNotifier {
       _campaingnCompanies = campCompanies;
 
       List<Group> campGroups = [];
+
       if(extractedData['groups'].length > 0) {
         extractedData['groups'].forEach((g) {
           campGroups.add(
@@ -177,11 +177,11 @@ class Campaigns with ChangeNotifier {
       }
       _campaingnGroups = campGroups;
 
-      // search = '';
       filteredCampaign = selectedCampaign;
 
-      notifyListeners();
       _isLoading = false;
+
+      notifyListeners();
 
     } catch (error) {
       throw(error);

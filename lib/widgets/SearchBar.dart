@@ -23,7 +23,6 @@ class _SearchBarState extends State<SearchBar> {
       );
     });
     context.read<Campaigns>().setSearchContent(value);
-    // context.read<Campaigns>().filterCampaign();
   }
 
   @override
