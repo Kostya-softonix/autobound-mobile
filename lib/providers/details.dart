@@ -234,9 +234,6 @@ class Details with ChangeNotifier {
           );
         });
       }
-      // print('Content List');
-      // print(listContent);
-
       _content = listContent;
 
       print('Content List provider');

@@ -6,8 +6,8 @@ import 'package:hexcolor/hexcolor.dart';
 import '../core/helpers.dart';
 import '../providers/triggers.dart';
 import '../providers/auth.dart';
-import '../widgets/AppDrawer.dart';
-import '../widgets/TriggerCard.dart';
+import '../widgets/general/AppDrawer.dart';
+import '../widgets/campaign/TriggerCard.dart';
 import '../screens/TriggerScreen.dart';
 
 class CampaignScreen extends StatefulWidget {

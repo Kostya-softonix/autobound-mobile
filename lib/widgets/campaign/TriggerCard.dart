@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../models/trigger.dart';
+import '../../models/trigger.dart';
 
 class TriggerCard extends StatelessWidget {
   final Trigger trigger;

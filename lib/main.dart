@@ -13,7 +13,7 @@ import './screens/AuthScreen.dart';
 import './screens/CampaignScreen.dart';
 import './screens/TriggerScreen.dart';
 import './screens/DetailsScreen.dart';
-import './widgets/SplashScreen.dart';
+import 'widgets/general/SplashScreen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

@@ -61,7 +61,6 @@ class ContactDetailsScreen extends StatelessWidget {
                   showDuration: Duration(milliseconds: 1),
                   child: Text(
                     data ?? 'Unknown',
-                    // data == null ? 'Unknown' : data,
                     textAlign: TextAlign.end,
                     overflow: TextOverflow.fade,
                     softWrap: false,
@@ -141,8 +140,14 @@ class ContactDetailsScreen extends StatelessWidget {
           child: Column(
             children: [
               profileInfoItem('Job title:', contactDetails.title, false, false, context),
-              profileInfoItem('Company:', companyDetails.name, false, false,context),
-              profileInfoItem('Website:', companyDetails.websiteUrl, true, false, context),
+              profileInfoItem('Company:', companyDetails.name, false, false, context),
+              profileInfoItem(
+                'Website:',
+                companyDetails.websiteUrl,
+                companyDetails.websiteUrl.contains('http') || companyDetails.websiteUrl.contains('https'),
+                false,
+                context
+              ),
               profileInfoItem('Email:', contactDetails.email, false, true, context),
               profileInfoItem('Industry:', companyDetails.industry, false, false, context),
               profileInfoItem('Created date:', contactDetails.externalCreatedAt, false, false, context),

@@ -1,4 +1,4 @@
-import '../providers/campaigns.dart';
+import '../../providers/campaigns.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -94,13 +94,13 @@ class SingleContactFull extends StatelessWidget {
         children: [
           getRowContact(
             'Recipient name:',
-            contact['fullName'] == null  ? 'Unknown' : contact['fullName'], context),
+            contact['fullName'] ?? 'Unknown', context),
           getRowContact(
             'Recipient company:',
-            contactCompany == null ? 'Unknown' : contactCompany, context),
+            contactCompany ?? 'Unknown', context),
           getRowContact(
             'Job title:',
-            contact['title'] == null ? 'Unknown' : contact['title'], context
+            contact['title'] ?? 'Unknown', context
           ),
         ],
       ),

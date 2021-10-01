@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
-import '../models/general.dart';
-import '../providers/details.dart';
+import '../../models/general.dart';
+import '../../providers/details.dart';
 
 class ContactCard extends StatelessWidget {
 

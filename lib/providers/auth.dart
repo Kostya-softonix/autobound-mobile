@@ -4,11 +4,9 @@ import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-// import '../models/general.dart';
-
+import '../core/api_helpers.dart';
 
 class Auth with ChangeNotifier {
-  static const apiUrl = 'https://dev.autobound.ai/api/';
 
   bool _isLoading = false;
 

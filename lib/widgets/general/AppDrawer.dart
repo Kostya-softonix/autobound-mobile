@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-import '../providers/auth.dart';
+import '../../providers/auth.dart';
 
 class AppDrawer extends StatelessWidget {
 
@@ -49,12 +49,12 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final Map<String, dynamic> userProfile = context.read<Auth>().userProfile;
 
-    final String userAchronym = userProfile['firstName'][0] + userProfile['lastName'][0].toString();
-    final String user = userProfile['firstName'] + userProfile['lastName'].toString();
-    final String company = userProfile['companyName'] == null ? 'Unknown' : userProfile['companyName'].toString();
-    final String jobTitle = userProfile['jobTitle'] == null ? 'Unknown' : userProfile['jobTitle'].toString();
-    final String email = userProfile['email'].toString();
-    final String companyWebsiteUrl = userProfile['companyWebsiteUrl'] == null ? 'Unknown' : userProfile['companyWebsiteUrl'].toString();
+    final String userAchronym = userProfile['firstName'][0] + userProfile['lastName'][0];
+    final String user = userProfile['firstName'] + userProfile['lastName'];
+    final String company = userProfile['companyName'] ?? 'Unknown';
+    final String jobTitle = userProfile['jobTitle'] ?? 'Unknown';
+    final String email = userProfile['email'];
+    final String companyWebsiteUrl = userProfile['companyWebsiteUrl'] ?? 'Unknown';
 
     return
       Drawer(

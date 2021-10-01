@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
-import '../core/helpers.dart';
+import '../core/api_helpers.dart';
 import '../models/general.dart';
 
 class Campaigns with ChangeNotifier {

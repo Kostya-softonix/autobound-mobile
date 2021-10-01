@@ -2,43 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 
-import '../models/general.dart';
-import '../core/regexes.dart';
+import '../../core/html_helpers.dart';
+import '../../models/general.dart';
 
 class EditInMailAppButton extends StatelessWidget {
   final String contactEmail;
   final List<CustomEmailContent> content;
-  final Function convertRawHtmlToCustomField;
+  final Map<String, dynamic> customFields;
 
   EditInMailAppButton(
     this.contactEmail,
     this.content,
-    this.convertRawHtmlToCustomField
+    this.customFields
   );
 
-  void showNoMailAppsDialog(BuildContext context) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("Open Mail App"),
-            content: Text("No mail apps installed"),
-            actions: <Widget>[
-              TextButton(
-                child: Text("OK"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )
-            ],
-          );
-        },
-      );
-    }
+  showNoMailAppsDialog(BuildContext context) {
+    CupertinoAlertDialog alert = CupertinoAlertDialog(
+      title: Text('Open Mail App'),
+      content: Text('No mail apps installed'),
+      actions: [
+        CupertinoDialogAction(
+          child: Text('OK'),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    );
 
-  String removeHtmlTags(String contentItem) {
-    final extendedItem = contentItem.replaceAll(addNewLineRegex, '</p>\n');
-    return extendedItem.replaceAll(removeHtmlRegex, '');
+    return showCupertinoDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   Future<void> openMailClientAndPopulateEmailData(BuildContext context) async {
@@ -56,13 +53,13 @@ class EditInMailAppButton extends StatelessWidget {
               to: [
                 contactEmail,
               ],
-              subject: removeHtmlTags(convertRawHtmlToCustomField(content[0].text)),
+              subject: removeHtmlTags(convertRawHtmlToCustomField(content[0].text, customFields)),
               body: '''
-                ${removeHtmlTags(convertRawHtmlToCustomField(content[1].text))}
-                ${removeHtmlTags(convertRawHtmlToCustomField(content[2].text))}
-                ${removeHtmlTags(convertRawHtmlToCustomField(content[3].text))}
-                ${removeHtmlTags(convertRawHtmlToCustomField(content[4].text))}
-                ${removeHtmlTags(convertRawHtmlToCustomField(content[5].text))}
+                ${removeHtmlTags(convertRawHtmlToCustomField(content[1].text, customFields))}
+                ${removeHtmlTags(convertRawHtmlToCustomField(content[2].text, customFields))}
+                ${removeHtmlTags(convertRawHtmlToCustomField(content[3].text, customFields))}
+                ${removeHtmlTags(convertRawHtmlToCustomField(content[4].text, customFields))}
+                ${removeHtmlTags(convertRawHtmlToCustomField(content[5].text, customFields))}
               ''',
               // cc: ['sales@autobound.ai'],
               // bcc: ['sales@autobound.ai'],

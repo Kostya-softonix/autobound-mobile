@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../providers/campaigns.dart';
+import '../../providers/campaigns.dart';
 
 class SearchBar extends StatefulWidget {
   @override

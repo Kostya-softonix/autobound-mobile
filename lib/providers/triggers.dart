@@ -4,10 +4,10 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 
 import '../models/trigger.dart';
+import '../core/api_helpers.dart';
 
 
 class Triggers with ChangeNotifier {
-  static const apiUrl = 'https://dev.autobound.ai/api/';
 
   List<Trigger> _triggers = [];
 

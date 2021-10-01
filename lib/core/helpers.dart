@@ -3,8 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/cupertino.dart';
 
-const apiUrl = 'https://dev.autobound.ai/api/';
-
 AppBar generateAppBar (String title) {
   return AppBar(
     iconTheme: IconThemeData(

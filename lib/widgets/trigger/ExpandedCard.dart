@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-import '../widgets/SingleContact.dart';
-import '../models/trigger.dart';
-import '../models/general.dart';
+import 'SingleContact.dart';
+import '../../models/trigger.dart';
+import '../../models/general.dart';
 
 class ExpandedCard extends StatelessWidget {
   final Group group;

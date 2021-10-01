@@ -1,3 +1,5 @@
+const apiUrl = 'https://dev.autobound.ai/api/';
+
 class JsonIdPayload {
   String id;
 

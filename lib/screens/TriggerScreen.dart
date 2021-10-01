@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 import '../models/general.dart';
-import '../widgets/SearchBar.dart';
-import '../widgets/ExpandedCard.dart';
+import '../widgets/trigger/SearchBar.dart';
+import '../widgets/trigger/ExpandedCard.dart';
 import '../models/trigger.dart';
 import '../providers/campaigns.dart';
 import '../core/helpers.dart';
@@ -28,9 +28,7 @@ class _TriggerScreenState extends State<TriggerScreen> {
     super.initState();
     Future.delayed(Duration.zero,() {
       final Trigger trigger = ModalRoute.of(context).settings.arguments;
-      print(trigger);
       final String token = context.read<Auth>().token;
-      print(token);
       context.read<Campaigns>().fetchGroupsByTrigger(
         trigger.id,
         token

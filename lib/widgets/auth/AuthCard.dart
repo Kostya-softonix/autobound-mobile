@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
-import '../core/regexes.dart';
-import '../providers/auth.dart';
+import '../../core/regexes.dart';
+import '../../providers/auth.dart';
 
 class AuthCard extends StatefulWidget {
   const AuthCard({ Key key, }) : super(key: key);

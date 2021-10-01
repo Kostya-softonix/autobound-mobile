@@ -3,15 +3,15 @@ import 'package:expandable/expandable.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/SingleContactFull.dart';
-import '../models/trigger.dart';
+import 'SingleContactFull.dart';
+import '../../models/trigger.dart';
 
-import '../models/general.dart';
+import '../../models/general.dart';
 
-import '../screens/DetailsScreen.dart';
-import '../providers/campaigns.dart';
-import '../providers/auth.dart';
-import '../providers/details.dart';
+import '../../screens/DetailsScreen.dart';
+import '../../providers/campaigns.dart';
+import '../../providers/auth.dart';
+import '../../providers/details.dart';
 
 
 
