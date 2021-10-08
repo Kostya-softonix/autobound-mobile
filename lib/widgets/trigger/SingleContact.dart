@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-import '../../core/helpers.dart';
+import '../../helpers/helpers.dart';
 import '../../providers/campaigns.dart';
 
 class SingleContact extends StatelessWidget {

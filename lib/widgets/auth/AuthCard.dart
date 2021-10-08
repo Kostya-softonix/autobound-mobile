@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/regexes.dart';
-import '../../providers/auth.dart';
+import 'package:autobound_mobile/models/auth/auth_models.dart';
+import 'package:autobound_mobile/core/regexes.dart';
+import 'package:autobound_mobile/providers/auth.dart';
+import 'package:autobound_mobile/helpers/helpers.dart';
+
 
 class AuthCard extends StatefulWidget {
   const AuthCard({ Key key, }) : super(key: key);
@@ -14,40 +17,18 @@ class AuthCard extends StatefulWidget {
 }
 
 class _AuthCardState extends State<AuthCard> {
-  Map<String, String> _authData = {
-    'email': '',
-    'password': '',
-  };
+  AuthData _authData = AuthData(
+    email: '',
+    password: '',
+  );
 
-  var isLoading = false;
+  bool isLoading = false;
 
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
-  var _emailErrorMessage = '';
-  var _passwordErrorMessage = '';
-
-  _showDialog(BuildContext context, String message) {
-    CupertinoAlertDialog alert = CupertinoAlertDialog(
-      title: Text('Authentication error!'),
-      content: Text(message + '. Please check your credentials and try again.' ),
-      actions: [
-        CupertinoDialogAction(
-          child: Text('OK'),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ],
-    );
-
-    return showCupertinoDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
+  String _emailErrorMessage = '';
+  String _passwordErrorMessage = '';
 
   void _onChangeEmail(String value) {
     if(value == '') {
@@ -55,7 +36,7 @@ class _AuthCardState extends State<AuthCard> {
         _emailErrorMessage = '';
       });
     }
-    _authData['email'] = value;
+    _authData.email = value;
   }
 
   void _onChangePassword(String value) {
@@ -64,7 +45,7 @@ class _AuthCardState extends State<AuthCard> {
         _passwordErrorMessage = '';
       });
     }
-    _authData['password'] = value;
+    _authData.password = value;
   }
 
   bool validateEmail() {
@@ -134,13 +115,12 @@ class _AuthCardState extends State<AuthCard> {
         isLoading = true;
       });
       try {
-        final res = await context.read<Auth>().authentication(
-          _authData['email'],
-          _authData['password']
-        );
+        final res = await context.read<Auth>().authentication(_authData);
         print(res);
         if(res != 'success') {
-          _showDialog(context, res);
+          showDialogCupertino(
+            context,
+            res + '. Please check your credentials and try again.');
         }
       } catch (error) {
         print(error);
@@ -304,11 +284,9 @@ class _AuthCardState extends State<AuthCard> {
             : double.infinity,
           height: 38.0,
           child: isLoading
-            ? CircularProgressIndicator(
-              valueColor: new AlwaysStoppedAnimation<Color>(
-                Theme.of(context).primaryColor
-              ),
-              strokeWidth: 2,
+            ? CupertinoActivityIndicator(
+              animating: true,
+              radius: 16,
             )
             : CupertinoButton(
               onPressed: _submit,

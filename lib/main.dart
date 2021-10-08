@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
+import 'package:autobound_mobile/core/theme_colors.dart';
 
 import './providers/campaigns.dart';
 import './providers/auth.dart';
@@ -13,10 +13,13 @@ import './screens/AuthScreen.dart';
 import './screens/CampaignScreen.dart';
 import './screens/TriggerScreen.dart';
 import './screens/DetailsScreen.dart';
-import 'widgets/general/SplashScreen.dart';
+import './widgets/general/SplashScreen.dart';
+
+import 'package:autobound_mobile/widgets/general/SplashScreen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
   runApp(
     MultiProvider(
       providers: [
@@ -25,12 +28,12 @@ void main() {
         ChangeNotifierProvider(create: (_) => Campaigns()),
         ChangeNotifierProvider(create: (_) => Details()),
       ],
-      child: MyApp(),
+      child: App(),
     )
   );
 }
 
-class MyApp extends StatelessWidget {
+class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -43,14 +46,18 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
 
         theme: ThemeData(
-          primarySwatch: Colors.indigo,
-          primaryColor: HexColor('1A72DD'),
+          primaryColor: PrimaryColor,
+          primaryColorLight: primaryColorLight,
+          primaryColorDark: primaryColorDark,
+
           accentColor: Colors.amber,
-          primaryColorLight: CupertinoColors.white,
+          primarySwatch: Colors.indigo,
+
           visualDensity: VisualDensity.adaptivePlatformDensity,
           textTheme: GoogleFonts.rubikTextTheme(
             Theme.of(context).textTheme,
           ),
+
           appBarTheme: AppBarTheme(
             backgroundColor: CupertinoColors.white,
             elevation: 1,

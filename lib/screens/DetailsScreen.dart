@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
-import '../core/helpers.dart';
+import '../helpers/helpers.dart';
 import '../models/general.dart';
 import '../models/trigger.dart';
 import '../providers/details.dart';

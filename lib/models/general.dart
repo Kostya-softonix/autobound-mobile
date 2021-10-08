@@ -1,4 +1,3 @@
-
 class CustomEmailContent {
   final String paragraph;
   final String snippet;
@@ -258,6 +257,16 @@ class Contact {
     this.lastCampaignStartedAt,
   });
 
+  Contact.fromJson(Map<String, dynamic> json)
+  : id = json['id'],
+    company = json['company'],
+    firstName = json['firstName'],
+    fullName = json['fullName'],
+    lastName = json['lastName'],
+    title = json['title'],
+    lastActivityAt = json['lastActivityAt'],
+    lastCampaignStartedAt = json['lastCampaignStartedAt'];
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -280,6 +289,10 @@ class Company {
     this.name,
     this.id,
   });
+
+  Company.fromJson(Map<String, dynamic> json)
+      : name = json['name'],
+        id = json['id'];
 
   Map<String, dynamic> toMap() {
     return {

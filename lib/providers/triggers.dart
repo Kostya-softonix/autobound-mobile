@@ -2,10 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
-
-import '../models/trigger.dart';
-import '../core/api_helpers.dart';
-
+import 'package:autobound_mobile/models/trigger.dart';
+import 'package:autobound_mobile/helpers/api_helpers.dart';
 
 class Triggers with ChangeNotifier {
 
@@ -37,15 +35,17 @@ class Triggers with ChangeNotifier {
       if(extractedData != null) {
         extractedData['triggers'].forEach((trg) {
           fetchedTriggers.add(
-            Trigger(
-              id: trg['id'],
-              name: trg['name'],
-              contacts: trg['contacts'],
-              score: trg['score'],
-              groups: trg['groups'],
-              campaigns: trg['campaigns'],
-              companies: trg['companies'],
-            )
+            Trigger.fromJson(trg)
+
+            // Trigger(
+            //   id: trg['id'],
+            //   name: trg['name'],
+            //   contacts: trg['contacts'],
+            //   score: trg['score'],
+            //   groups: trg['groups'],
+            //   campaigns: trg['campaigns'],
+            //   companies: trg['companies'],
+            // )
           );
         });
       }

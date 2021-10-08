@@ -19,6 +19,16 @@ class Trigger {
     @required this.companies,
   });
 
+  factory Trigger.fromJson(Map<String, dynamic> json) => Trigger(
+    id: json['id'],
+    name: json['name'],
+    contacts: json['contacts'],
+    score: json['score'],
+    groups: json['groups'],
+    campaigns: json['campaigns'],
+    companies: json['companies'],
+  );
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,

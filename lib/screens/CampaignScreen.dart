@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-import '../core/helpers.dart';
+import '../helpers/helpers.dart';
 import '../providers/triggers.dart';
 import '../providers/auth.dart';
 import '../widgets/general/AppDrawer.dart';

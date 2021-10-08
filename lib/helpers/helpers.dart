@@ -115,3 +115,27 @@ SnackBar generateSnackBar (String title, String message) {
     ),
   );
 }
+
+showDialogCupertino(BuildContext context, String message) {
+
+    CupertinoAlertDialog alert = CupertinoAlertDialog(
+      title: Text('Authentication error!'),
+      content: Text(message),
+      actions: [
+        CupertinoDialogAction(
+          child: Text('OK'),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    );
+
+    return showCupertinoDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+

@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
-import '../core/api_helpers.dart';
-import '../core/helpers.dart';
+import '../helpers/api_helpers.dart';
+import '../helpers/helpers.dart';
 import '../models/general.dart';
 
 class Details with ChangeNotifier {
@@ -224,6 +224,7 @@ class Details with ChangeNotifier {
 
       if(sg['content'].length > 0) {
         sg['content'].forEach((c) {
+          print(c['text']);
           listContent.add(
             CustomEmailContent(
               paragraph: c['paragraph'],

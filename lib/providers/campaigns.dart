@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
-import '../core/api_helpers.dart';
+import '../helpers/api_helpers.dart';
 import '../models/general.dart';
 
 class Campaigns with ChangeNotifier {
@@ -126,16 +126,18 @@ class Campaigns with ChangeNotifier {
       if(extractedData['contacts'].length > 0) {
         extractedData['contacts'].forEach((c) {
           campContacts.add(
-            Contact(
-              id: c['id'],
-              company: c['company'],
-              firstName: c['firstName'],
-              fullName: c['fullName'],
-              lastName: c['lastName'],
-              title: c['title'],
-              lastActivityAt: c['lastActivityAt'],
-              lastCampaignStartedAt: c['lastCampaignStartedAt'],
-            )
+            Contact.fromJson(c)
+
+            // Contact(
+            //   id: c['id'],
+            //   company: c['company'],
+            //   firstName: c['firstName'],
+            //   fullName: c['fullName'],
+            //   lastName: c['lastName'],
+            //   title: c['title'],
+            //   lastActivityAt: c['lastActivityAt'],
+            //   lastCampaignStartedAt: c['lastCampaignStartedAt'],
+            // )
           );
         });
       }
@@ -146,10 +148,11 @@ class Campaigns with ChangeNotifier {
       if(extractedData['companies'].length > 0) {
         extractedData['companies'].forEach((c) {
           campCompanies.add(
-            Company(
-              id: c['id'],
-              name: c['name']
-            )
+            Company.fromJson(c)
+            // Company(
+            //   id: c['id'],
+            //   name: c['name']
+            // )
           );
         });
       }

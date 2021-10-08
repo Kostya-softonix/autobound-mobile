@@ -5,7 +5,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/helpers.dart';
+import '../../helpers/helpers.dart';
 import '../../providers/details.dart';
 import 'package:flutter/cupertino.dart';
 

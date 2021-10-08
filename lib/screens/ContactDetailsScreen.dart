@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../providers/details.dart';
-import '../core/helpers.dart';
+import '../helpers/helpers.dart';
 import '../models/general.dart';
 
 class ContactDetailsScreen extends StatelessWidget {

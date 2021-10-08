@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
-import '../core/api_helpers.dart';
+import 'package:autobound_mobile/models/auth/auth_models.dart';
+import 'package:autobound_mobile/services/auth_service.dart';
 
 class Auth with ChangeNotifier {
 
@@ -29,16 +29,64 @@ class Auth with ChangeNotifier {
     return token != null;
   }
 
+
+  Future<void> setTokenToSharedPreferences () async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final userData = json.encode({
+      'token': _token,
+    });
+
+    prefs.setString('userProfile', userData);
+  }
+
+  Future<String> authentication(AuthData authData) async {
+    try {
+      Map<String, dynamic> resData = await authResponse(authData);
+
+      if (resData['error'] != null) return resData['error']['message'];
+
+      _token = resData['token'];
+
+      print(_token);
+
+      setTokenToSharedPreferences();
+
+      await getUserProfile(_token);
+
+      notifyListeners();
+
+      return 'success';
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // User Profile
+  UserProfile userProfile;
+
+  Future<bool> getUserProfile (String token) async {
+    try {
+      userProfile = await userProfileResponse(token);
+
+      notifyListeners();
+      return userProfile.success;
+
+    } catch(error) {
+      print(error);
+      return false;
+
+    }
+  }
+
+  // Autologin
   Future<void> tryAutologin() async {
     final prefs = await SharedPreferences.getInstance();
 
-    if (!prefs.containsKey('userProfile')) {
-      return false;
-    }
+    if (!prefs.containsKey('userProfile')) return false;
 
     final extractedUserData = json.decode(prefs.getString('userProfile')) as Map<String, Object>;
 
-    print('token from prefs');
     print(extractedUserData['token']);
 
     final isValid = await getUserProfile(extractedUserData['token']);
@@ -53,86 +101,12 @@ class Auth with ChangeNotifier {
   }
 
 
-  Future<String> authentication(String email, String password) async {
-    final  url = apiUrl + 'auth/login';
-
-    try {
-      final body = json.encode({
-        'email': email,
-        'password': password,
-      });
-
-      final res = await http.post(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: body,
-      );
-
-      final resData = json.decode(res.body);
-      print(resData);
-
-      if (resData['error'] != null) return resData['error']['message'];
-
-      _token = resData['token'];
-
-      final prefs = await SharedPreferences.getInstance();
-      final userData = json.encode(
-        {
-          'token': _token,
-          'email': email,
-          'password': password
-        }
-      );
-      prefs.setString('userProfile', userData);
-
-      await getUserProfile(_token);
-
-      notifyListeners();
-
-      return 'success';
-
-    } catch (error) {
-      throw error;
-    }
-  }
-
   Future<void> logOut() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();
+
     _token = null;
+
     notifyListeners();
   }
-
-  // User Profile
-  Map<String, dynamic> userProfile = {};
-
-  Future<bool> getUserProfile (String prefsToken) async {
-    final url = apiUrl + 'userProfile';
-    try {
-      final res = await http.get(
-        url,
-        headers: <String, String> {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'auth': prefsToken,
-        },
-      );
-
-      // final extractedData = json.decode(res.body) as Map<String, dynamic>;
-      userProfile = json.decode(res.body) as Map<String, dynamic>;
-      print('userProfile response');
-      print(userProfile);
-      notifyListeners();
-
-      final bool isSuccess = userProfile['success'];
-      print(isSuccess);
-      return isSuccess;
-
-    } catch(error) {
-      print(error);
-      return false;
-    }
-  }
-
 }

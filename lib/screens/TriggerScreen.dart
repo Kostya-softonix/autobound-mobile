@@ -8,7 +8,7 @@ import '../widgets/trigger/SearchBar.dart';
 import '../widgets/trigger/ExpandedCard.dart';
 import '../models/trigger.dart';
 import '../providers/campaigns.dart';
-import '../core/helpers.dart';
+import '../helpers/helpers.dart';
 import '../providers/auth.dart';
 import '../providers/details.dart';
 import '../screens/DetailsScreen.dart';

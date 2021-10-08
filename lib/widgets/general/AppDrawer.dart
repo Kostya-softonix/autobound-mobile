@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-import 'package:hexcolor/hexcolor.dart';
+import 'package:autobound_mobile/models/auth/auth_models.dart';
+import 'package:autobound_mobile/providers/auth.dart';
+import 'package:autobound_mobile/core/theme_colors.dart';
 
-import '../../providers/auth.dart';
 
 class AppDrawer extends StatelessWidget {
 
@@ -21,7 +22,7 @@ class AppDrawer extends StatelessWidget {
             child: Text(
               title,
               style: TextStyle(
-                color: HexColor('2A3256'),
+                color: greyTitle,
                 fontSize: 11.0,
                 fontWeight: FontWeight.w400
               ),
@@ -45,16 +46,20 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> userProfile = context.read<Auth>().userProfile;
+    final UserProfile userProfile = context.watch<Auth>().userProfile;
 
-    final String userAchronym = userProfile['firstName'][0] + userProfile['lastName'][0];
-    final String user = userProfile['firstName'] + userProfile['lastName'];
-    final String company = userProfile['companyName'] ?? 'Unknown';
-    final String jobTitle = userProfile['jobTitle'] ?? 'Unknown';
-    final String email = userProfile['email'];
-    final String companyWebsiteUrl = userProfile['companyWebsiteUrl'] ?? 'Unknown';
+
+    final String firstName = userProfile.firstName ?? 'Unknown';
+    final String lastName = userProfile.lastName ?? 'Unknown';
+    final String userAchronym = '${firstName.substring(0,1)}${lastName.substring(0,1)}' ?? '?';
+    final String company = userProfile.companyName ?? 'Unknown';
+    final String jobTitle = userProfile.jobTitle ?? 'Unknown';
+    final String email = userProfile.email ?? 'Unknown';
+    final String companyWebsiteUrl = userProfile.companyWebsiteUrl ?? 'Unknown';
 
     return
       Drawer(
@@ -80,7 +85,8 @@ class AppDrawer extends StatelessWidget {
                       ),
                     ),
                   ),
-                  profileInfoItem('User:', user),
+                  profileInfoItem('First Name:', userProfile.firstName),
+                  profileInfoItem('Last Name:', userProfile.lastName),
                   profileInfoItem('Company:', company),
                   profileInfoItem('Job title:', jobTitle),
                   profileInfoItem('Email:', email),

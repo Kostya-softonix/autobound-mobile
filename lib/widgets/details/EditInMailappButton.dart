@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 
-import '../../core/html_helpers.dart';
-import '../../models/general.dart';
+import 'package:autobound_mobile/helpers/html_helpers.dart';
+import 'package:autobound_mobile/models/general.dart';
 
 class EditInMailAppButton extends StatelessWidget {
   final String contactEmail;

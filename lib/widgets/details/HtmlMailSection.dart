@@ -2,8 +2,8 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:flutter/material.dart';
 
-import '../../core/html_helpers.dart';
-import '../../core/helpers.dart';
+import '../../helpers/html_helpers.dart';
+import '../../helpers/helpers.dart';
 import '../../models/general.dart';
 
 class HtmlMailSection extends StatelessWidget {
