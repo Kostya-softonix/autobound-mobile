@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:autobound_mobile/models/auth/auth_models.dart';
 import 'package:autobound_mobile/providers/auth.dart';
-import 'package:autobound_mobile/core/theme_colors.dart';
+import 'package:autobound_mobile/styles/theme_colors.dart';
 
 
 class AppDrawer extends StatelessWidget {
@@ -11,7 +11,7 @@ class AppDrawer extends StatelessWidget {
   Widget profileInfoItem(String title, String data) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 5.0 ),
+      padding: const EdgeInsets.symmetric(horizontal: 5.0),
       margin: const EdgeInsets.only(top: 10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -22,13 +22,13 @@ class AppDrawer extends StatelessWidget {
             child: Text(
               title,
               style: TextStyle(
-                color: greyTitle,
+                color: AppColors.greyTitle,
                 fontSize: 11.0,
                 fontWeight: FontWeight.w400
               ),
             ),
           ),
-          Container(
+          SizedBox(
             width: 170,
             child: Text(
               data,
@@ -36,7 +36,7 @@ class AppDrawer extends StatelessWidget {
               softWrap: false,
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 11.0,
+                fontSize: 11.5,
                 fontWeight: FontWeight.w600
               ),
             ),

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:autobound_mobile/helpers/api_helpers.dart';
 
-import 'package:autobound_mobile/models/auth/auth_models.dart';
+import 'package:autobound_mobile/models/index.dart';
 
 Future<Map<String, dynamic>> authResponse(AuthData authData) async {
   String url = apiUrl + 'auth/login';

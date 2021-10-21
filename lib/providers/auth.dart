@@ -75,7 +75,6 @@ class Auth with ChangeNotifier {
     } catch(error) {
       print(error);
       return false;
-
     }
   }
 

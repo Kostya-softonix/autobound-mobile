@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-import 'package:autobound_mobile/core/theme_colors.dart';
+import 'package:autobound_mobile/styles/theme_colors.dart';
 
 import './providers/campaigns.dart';
 import './providers/auth.dart';
@@ -46,9 +46,9 @@ class App extends StatelessWidget {
         debugShowCheckedModeBanner: false,
 
         theme: ThemeData(
-          primaryColor: PrimaryColor,
-          primaryColorLight: primaryColorLight,
-          primaryColorDark: primaryColorDark,
+          primaryColor: AppColors.PrimaryColor,
+          primaryColorLight: AppColors.primaryColorLight,
+          primaryColorDark: AppColors.primaryColorDark,
 
           accentColor: Colors.amber,
           primarySwatch: Colors.indigo,
